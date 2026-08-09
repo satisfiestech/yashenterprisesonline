@@ -283,11 +283,28 @@ function validateDelivery() {
     valid = false;
   }
   if (!valid) { alert('Please fill all required fields correctly.'); return; }
-  const sub = cart.reduce((s,c) => s+c.price*c.qty, 0);
+  const sub   = cart.reduce((s,c) => s+c.price*c.qty, 0);
+  const total = sub + deliveryCharge;
+
+  // populate payment step
   document.getElementById('pay-sub').textContent   = `₹${sub}`;
   document.getElementById('pay-del').textContent   = `₹${deliveryCharge}`;
-  document.getElementById('pay-total').textContent = `₹${sub + deliveryCharge}`;
+  document.getElementById('pay-total').textContent = `₹${total}`;
+  document.getElementById('qr-amount').textContent  = `₹${total}`;
+  document.getElementById('qr-amount2').textContent = `₹${total}`;
+
+  // generate QR code via free API — encodes a UPI payment link
+  const upiLink = `upi://pay?pa=7020121893@upi&pn=Yash+Enterprises+Online&am=${total}&cu=INR&tn=Book+Order`;
+  const qrUrl   = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiLink)}&color=6c3483&bgcolor=ffffff&margin=6`;
+  document.getElementById('qrImg').src = qrUrl;
+
   goStep(3);
+}
+
+function copyUPI() {
+  navigator.clipboard.writeText('7020121893@upi').then(() => {
+    alert('UPI ID copied: 7020121893@upi');
+  });
 }
 
 function placeOrder() {
@@ -297,10 +314,8 @@ function placeOrder() {
   const city    = document.getElementById('city').value;
   const state   = document.getElementById('state').value;
   const pin     = document.getElementById('pincode').value;
-  const payment = document.querySelector('input[name="payment"]:checked').value;
-  const payLabels = { upi:'UPI / GPay / PhonePe', card:'Credit / Debit Card', netbanking:'Net Banking', cod:'Cash on Delivery' };
-  const sub   = cart.reduce((s,c) => s+c.price*c.qty, 0);
-  const total = sub + deliveryCharge;
+  const sub     = cart.reduce((s,c) => s+c.price*c.qty, 0);
+  const total   = sub + deliveryCharge;
   const orderId = 'YEO' + Date.now().toString().slice(-6);
 
   document.getElementById('confirmMsg').textContent =
@@ -310,7 +325,7 @@ function placeOrder() {
     <b>Items:</b> ${cart.reduce((s,c)=>s+c.qty,0)} book(s)<br/>
     <b>Deliver to:</b> ${address}, ${city}, ${state} – ${pin}<br/>
     <b>Mobile:</b> ${mobile}<br/>
-    <b>Payment:</b> ${payLabels[payment]}<br/>
+    <b>Payment:</b> UPI / QR Code<br/>
     <b>Amount Paid:</b> ₹${total}<br/>
     <b>Estimated Delivery:</b> ${deliveryCharge===99?'2–3':deliveryCharge===0?'7–10':'5–7'} business days
   `;

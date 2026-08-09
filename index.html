@@ -250,49 +250,63 @@
       <button class="btn-next" onclick="validateDelivery()">Continue to Payment <i class="fas fa-arrow-right"></i></button>
     </div>
 
-    <!-- STEP 3: Payment -->
+    <!-- STEP 3: Payment via QR -->
     <div class="checkout-step" id="checkStep3" style="display:none">
       <div class="checkout-header">
         <button class="back-btn" onclick="goStep(2)"><i class="fas fa-arrow-left"></i></button>
-        <h3><i class="fas fa-credit-card"></i> Payment</h3>
+        <h3><i class="fas fa-qrcode"></i> Pay via QR Code</h3>
         <button class="close-modal" onclick="closeCheckout()"><i class="fas fa-times"></i></button>
       </div>
-      <div class="payment-methods">
-        <label class="pay-opt">
-          <input type="radio" name="payment" value="upi" checked/>
-          <div class="pay-box">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/200px-UPI-Logo-vector.svg.png" alt="UPI" style="height:28px"/>
-            <span>UPI / GPay / PhonePe / Paytm</span>
+
+      <div class="qr-payment-wrap">
+        <!-- Amount banner -->
+        <div class="qr-amount-banner">
+          <span>Amount to Pay</span>
+          <strong id="qr-amount">₹0</strong>
+        </div>
+
+        <!-- QR + instructions -->
+        <div class="qr-body">
+          <div class="qr-left">
+            <div class="qr-frame">
+              <!-- Generated QR using api.qrserver.com pointing to UPI deep-link -->
+              <img id="qrImg" src="" alt="UPI QR Code"/>
+              <div class="qr-shine"></div>
+            </div>
+            <div class="upi-logos">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/120px-UPI-Logo-vector.svg.png" alt="UPI"/>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/120px-Google_Pay_Logo.svg.png" alt="GPay"/>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/120px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm"/>
+            </div>
           </div>
-        </label>
-        <label class="pay-opt">
-          <input type="radio" name="payment" value="card"/>
-          <div class="pay-box">
-            <i class="fas fa-credit-card" style="color:#6c3483;font-size:1.4rem"></i>
-            <span>Credit / Debit Card</span>
+
+          <div class="qr-right">
+            <h4>How to Pay</h4>
+            <ol class="qr-steps">
+              <li><i class="fas fa-mobile-alt"></i> Open any UPI app<br/><small>GPay, PhonePe, Paytm, BHIM</small></li>
+              <li><i class="fas fa-qrcode"></i> Tap <b>Scan QR</b> and scan the code</li>
+              <li><i class="fas fa-rupee-sign"></i> Verify amount <b id="qr-amount2">₹0</b> and pay</li>
+              <li><i class="fas fa-check-circle"></i> Click <b>I've Paid</b> below</li>
+            </ol>
+            <div class="upi-id-box">
+              <span>UPI ID</span>
+              <strong>7020121893@upi</strong>
+              <button onclick="copyUPI()" title="Copy UPI ID"><i class="fas fa-copy"></i></button>
+            </div>
           </div>
-        </label>
-        <label class="pay-opt">
-          <input type="radio" name="payment" value="netbanking"/>
-          <div class="pay-box">
-            <i class="fas fa-university" style="color:#0984e3;font-size:1.4rem"></i>
-            <span>Net Banking</span>
-          </div>
-        </label>
-        <label class="pay-opt">
-          <input type="radio" name="payment" value="cod"/>
-          <div class="pay-box">
-            <i class="fas fa-money-bill-wave" style="color:#00b894;font-size:1.4rem"></i>
-            <span>Cash on Delivery</span>
-          </div>
-        </label>
+        </div>
+
+        <!-- Pay summary -->
+        <div class="pay-summary">
+          <div class="sum-row"><span>Subtotal</span><b id="pay-sub">₹0</b></div>
+          <div class="sum-row"><span>Delivery</span><b id="pay-del">₹0</b></div>
+          <div class="sum-row total-sum"><span>Total Payable</span><b id="pay-total">₹0</b></div>
+        </div>
+
+        <button class="btn-next btn-paid" onclick="placeOrder()">
+          <i class="fas fa-check-circle"></i> I've Paid — Confirm Order
+        </button>
       </div>
-      <div class="pay-summary">
-        <div class="sum-row"><span>Subtotal</span><b id="pay-sub">₹0</b></div>
-        <div class="sum-row"><span>Delivery</span><b id="pay-del">₹0</b></div>
-        <div class="sum-row total-sum"><span>Total Payable</span><b id="pay-total">₹0</b></div>
-      </div>
-      <button class="btn-next" onclick="placeOrder()"><i class="fas fa-lock"></i> Place Order</button>
     </div>
 
     <!-- STEP 4: Confirmation -->
