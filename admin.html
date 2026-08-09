@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel – Yash Enterprises Online</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="admin.css"/>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <img src="logo.svg" alt="Logo" class="login-logo"/>
+    <h2>Admin Login</h2>
+    <p>Yash Enterprises Online</p>
+    <div class="login-form">
+      <div class="login-field">
+        <i class="fas fa-user"></i>
+        <input type="text" id="adminUser" placeholder="Username" autocomplete="off"/>
+      </div>
+      <div class="login-field">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="adminPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
+      <div class="login-error" id="loginError"></div>
+      <div class="login-hint">
+        <i class="fas fa-info-circle"></i>
+        Username: <b>admin</b> &nbsp;|&nbsp; Password: <b>yash2025</b>
+      </div>
+      <button class="login-btn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div class="admin-wrap" id="adminWrap" style="display:none">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="logo.svg" alt="Logo"/>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" onclick="showTab('orders',event)">
+        <i class="fas fa-shopping-bag"></i><span>Orders</span>
+      </a>
+      <a href="#" class="nav-item" onclick="showTab('stats',event)">
+        <i class="fas fa-chart-bar"></i><span>Statistics</span>
+      </a>
+      <a href="#" class="nav-item" onclick="showTab('sheet',event)">
+        <i class="fas fa-table"></i><span>Google Sheet</span>
+      </a>
+      <a href="index.html" class="nav-item" target="_blank">
+        <i class="fas fa-store"></i><span>View Store</span>
+      </a>
+    </nav>
+    <button class="logout-btn" onclick="doLogout()">
+      <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+    </button>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <h1 id="pageTitle"><i class="fas fa-shopping-bag"></i> Orders Management</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-refresh" onclick="refreshOrders()" title="Sync from Google Sheet">
+          <i class="fas fa-sync-alt" id="refreshIcon"></i> Sync Sheet
+        </button>
+        <span class="admin-badge"><i class="fas fa-user-shield"></i> Admin</span>
+        <span class="date-badge" id="todayDate"></span>
+      </div>
+    </div>
+
+    <!-- ── ORDERS TAB ── -->
+    <div id="tabOrders">
+      <div class="stats-row" id="miniStats"></div>
+
+      <div class="table-toolbar">
+        <div class="toolbar-left">
+          <div class="search-wrap">
+            <i class="fas fa-search"></i>
+            <input type="text" id="orderSearch" placeholder="Search order ID, name, city, mobile..." oninput="renderTable()"/>
+          </div>
+          <select id="statusFilter" onchange="renderTable()">
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Processing">Processing</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="toolbar-right">
+          <button class="btn-export" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Export Excel</button>
+          <button class="btn-clear" onclick="clearAllOrders()"><i class="fas fa-trash"></i> Clear All</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Order ID</th>
+              <th>Date & Time</th>
+              <th>Customer</th>
+              <th>Mobile</th>
+              <th>City / State</th>
+              <th>PIN</th>
+              <th>Books Ordered</th>
+              <th>Items</th>
+              <th>Delivery</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState" style="display:none">
+          <i class="fas fa-inbox"></i>
+          <p>No orders found</p>
+          <small>Orders will appear here once customers place them</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STATS TAB ── -->
+    <div id="tabStats" style="display:none">
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <h3><i class="fas fa-tag"></i> Orders by Category</h3>
+          <canvas id="catChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3><i class="fas fa-rupee-sign"></i> Revenue – Last 7 Days</h3>
+          <canvas id="revChart"></canvas>
+        </div>
+      </div>
+      <div class="charts-row" style="margin-top:1.5rem">
+        <div class="chart-card">
+          <h3><i class="fas fa-circle-notch"></i> Orders by Status</h3>
+          <canvas id="statusChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3><i class="fas fa-book"></i> Top 5 Books</h3>
+          <div id="topBooksTable"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GOOGLE SHEET TAB ── -->
+    <div id="tabSheet" style="display:none">
+      <div class="sheet-card">
+        <div class="sheet-header">
+          <i class="fas fa-table" style="color:#27ae60;font-size:2rem"></i>
+          <div>
+            <h3>Google Sheet – Live Orders</h3>
+            <p>All orders are automatically saved to your Google Sheet in real time.</p>
+          </div>
+        </div>
+        <div class="sheet-actions">
+          <a href="https://docs.google.com/spreadsheets/d/1Bs9ND1O0DEKyytFcQeiQ04tmpmo54ADtKOOwMDJ1qIg/edit" target="_blank" class="btn-sheet-open">
+            <i class="fas fa-external-link-alt"></i> Open Google Sheet
+          </a>
+          <button class="btn-export" onclick="exportExcel()" style="padding:.7rem 1.4rem">
+            <i class="fas fa-file-excel"></i> Download Excel
+          </button>
+        </div>
+        <div class="sheet-info">
+          <div class="sheet-info-item"><i class="fas fa-check-circle" style="color:#27ae60"></i> Orders auto-saved on every purchase</div>
+          <div class="sheet-info-item"><i class="fas fa-check-circle" style="color:#27ae60"></i> Admin dashboard syncs from sheet on load</div>
+          <div class="sheet-info-item"><i class="fas fa-check-circle" style="color:#27ae60"></i> Use Sync button to refresh latest data</div>
+          <div class="sheet-info-item"><i class="fas fa-info-circle" style="color:#2980b9"></i> Sheet ID: 1Bs9ND1O0DEKyytFcQeiQ04tmpmo54ADtKOOwMDJ1qIg</div>
+        </div>
+        <div class="sheet-status" id="sheetStatus"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══ ORDER DETAIL MODAL ══ -->
+<div class="detail-modal" id="detailModal" onclick="closeDetail()">
+  <div class="detail-box" onclick="event.stopPropagation()">
+    <div class="detail-header">
+      <h3><i class="fas fa-receipt"></i> Order Details</h3>
+      <button onclick="closeDetail()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="detail-body" id="detailBody"></div>
+  </div>
+</div>
+
+<!-- Replace YOUR_APPS_SCRIPT_WEB_APP_URL with your deployed Apps Script URL -->
+<script>window.APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';</script>
+<script src="admin.js"></script>
+</body>
+</html>
