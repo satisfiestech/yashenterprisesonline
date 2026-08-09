@@ -3,101 +3,148 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yash Enterprises Online – Bookstore</title>
+  <meta name="description" content="Premium bookstore for competitive exams, UPSC, MPSC, SSC, Banking books and study materials."/>
+  <meta name="theme-color" content="#1e3a8a"/>
+  <title>Yash Enterprises Online – Premium Bookstore</title>
   <link rel="stylesheet" href="style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <a href="#home" class="logo">
-    <img src="logo.svg" alt="Yash Enterprises Online" class="logo-img"/>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#featured">Books</a></li>
-    <li><a href="#categories">Categories</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search books, authors..." oninput="searchBooks(this.value)" onkeydown="if(event.key==='Escape')clearSearch()"/>
-    <i class="fas fa-search search-icon"></i>
-    <button class="clear-btn" id="clearBtn" onclick="clearSearch()" style="display:none"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="cart-icon" onclick="toggleCart()">
-    <i class="fas fa-shopping-cart"></i>
-    <span class="cart-count" id="cartCount">0</span>
-  </div>
-</nav>
+<!-- HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <a href="#" class="logo-section">
+        <img src="logo.svg" alt="Yash Enterprises" class="logo"/>
+        <div class="logo-text">
+          <h1 class="brand-name">Yash Enterprises</h1>
+          <p class="brand-tagline">Premium Book Hub</p>
+        </div>
+      </a>
+      
+      <div class="search-wrapper">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search books, authors..." oninput="searchBooks(this.value)"/>
+      </div>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-content">
-    <h1>Discover Your Next<br/><span>Favourite Book</span></h1>
-    <p>Thousands of titles across every genre — delivered to your door.</p>
-    <a href="#featured" class="btn-primary">Shop Now</a>
+      <div class="header-actions">
+        <button class="lang-btn">हिंदी</button>
+        <button class="cart-btn" onclick="toggleCart()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
   </div>
-  <div class="hero-img">
-    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80" alt="Books"/>
-  </div>
-</section>
+</header>
 
-<!-- CATEGORIES -->
-<section class="categories" id="categories">
-  <h2 class="section-title">Browse Categories</h2>
-  <div class="cat-grid">
-    <div class="cat-card" style="--c:#ff6b6b" onclick="filterBooks('Fiction')">
-      <i class="fas fa-dragon"></i><span>Fiction</span>
-    </div>
-    <div class="cat-card" style="--c:#feca57" onclick="filterBooks('Science')">
-      <i class="fas fa-flask"></i><span>Science</span>
-    </div>
-    <div class="cat-card" style="--c:#48dbfb" onclick="filterBooks('Children')">
-      <i class="fas fa-child"></i><span>Children</span>
-    </div>
-    <div class="cat-card" style="--c:#ff9ff3" onclick="filterBooks('Romance')">
-      <i class="fas fa-heart"></i><span>Romance</span>
-    </div>
-    <div class="cat-card" style="--c:#54a0ff" onclick="filterBooks('History')">
-      <i class="fas fa-history"></i><span>History</span>
-    </div>
-    <div class="cat-card" style="--c:#5f27cd" onclick="filterBooks('Self-Help')">
-      <i class="fas fa-brain"></i><span>Self-Help</span>
-    </div>
-    <div class="cat-card" style="--c:#e67e22" onclick="filterBooks('Competitive')">
-      <i class="fas fa-graduation-cap"></i><span>Competitive</span>
-    </div>
-    <div class="cat-card" style="--c:#00b894" onclick="filterBooks('Biography')">
-      <i class="fas fa-user-tie"></i><span>Biography</span>
-    </div>
-    <div class="cat-card" style="--c:#d63031" onclick="filterBooks('Religion')">
-      <i class="fas fa-om"></i><span>Religion</span>
+<!-- HERO BANNER -->
+<section class="hero-banner">
+  <div class="banner-content">
+    <div class="banner-text">
+      <span class="banner-badge">Yash Exclusive Collection</span>
+      <h2 class="banner-title">UPSC & MPSC 2026 Study Materials</h2>
+      <p class="banner-desc">Comprehensive books, guides, and preparation strategies for competitive exams</p>
+      <button class="btn-browse">Browse Collection</button>
     </div>
   </div>
 </section>
 
-<!-- FEATURED BOOKS -->
-<section class="featured" id="featured">
-  <h2 class="section-title">Featured Books</h2>
-  <div class="filter-bar">
-    <button class="filter-btn active" onclick="filterBooks('All')">All</button>
-    <button class="filter-btn" onclick="filterBooks('Fiction')">Fiction</button>
-    <button class="filter-btn" onclick="filterBooks('Science')">Science</button>
-    <button class="filter-btn" onclick="filterBooks('Children')">Children</button>
-    <button class="filter-btn" onclick="filterBooks('Romance')">Romance</button>
-    <button class="filter-btn" onclick="filterBooks('History')">History</button>
-    <button class="filter-btn" onclick="filterBooks('Self-Help')">Self-Help</button>
-    <button class="filter-btn" onclick="filterBooks('Competitive')">Competitive</button>
-    <button class="filter-btn" onclick="filterBooks('Biography')">Biography</button>
-    <button class="filter-btn" onclick="filterBooks('Religion')">Religion</button>
+<!-- FEATURED BOOKS SECTION -->
+<section class="featured-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+        Trending Books
+      </h2>
+      <p class="section-desc">Best sellers and most-read preparation materials</p>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="tab-btn active" onclick="filterBooks('All')">All Books</button>
+      <button class="tab-btn" onclick="filterBooks('UPSC')">UPSC</button>
+      <button class="tab-btn" onclick="filterBooks('MPSC')">MPSC</button>
+      <button class="tab-btn" onclick="filterBooks('SSC')">SSC</button>
+      <button class="tab-btn" onclick="filterBooks('Banking')">Banking</button>
+    </div>
+
+    <div class="books-grid" id="booksGrid"></div>
+    <div class="no-result" id="noResult" style="display: none;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <p>No books found for your search.</p>
+      <button class="btn-secondary" onclick="clearSearch()">Clear Search</button>
+    </div>
   </div>
-  <div class="books-grid" id="booksGrid"></div>
-  <div class="no-result" id="noResult">
-    <i class="fas fa-search"></i>
-    <p>No books found for your search.</p>
-    <button class="btn-primary" onclick="clearSearch()">Clear Search</button>
+</section>
+
+<!-- MAIN CONTENT GRID -->
+<section class="content-grid">
+  <div class="container">
+    <div class="grid-2col">
+      <!-- LEFT: GUIDANCE HUB -->
+      <div class="guidance-card">
+        <div class="card-header">
+          <h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+            Exam Preparation Guide
+          </h3>
+          <span class="badge">Strategies Active</span>
+        </div>
+        <div class="articles-list">
+          <div class="article-item">
+            <span class="article-tag">Strategy</span>
+            <span class="read-time">8 min</span>
+            <h4>MPSC 2026 Descriptive Writing Techniques</h4>
+            <p>Master structured answers, introduction frameworks, and conclusion strategies for MPSC descriptive papers.</p>
+            <a href="#" class="read-more">Read Article →</a>
+          </div>
+          <div class="article-item">
+            <span class="article-tag">Study Tips</span>
+            <span class="read-time">5 min</span>
+            <h4>UPSC General Studies Revision Plan</h4>
+            <p>Comprehensive revision checklist covering GS Papers I-IV with core themes and important topics.</p>
+            <a href="#" class="read-more">Read Article →</a>
+          </div>
+          <div class="article-item">
+            <span class="article-tag">Time Management</span>
+            <span class="read-time">6 min</span>
+            <h4>Speed Maths & Reasoning Tips</h4>
+            <p>Calculate percentages, interests, and solve logical reasoning puzzles in under 30 seconds.</p>
+            <a href="#" class="read-more">Read Article →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: RESOURCES BOX -->
+      <div class="resources-card">
+        <h3>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+          Study Resources
+        </h3>
+        <p>Access verified preparation materials and expert recommendations.</p>
+        <div class="resources-list">
+          <div class="resource-row">
+            <span>MPSC Updates</span>
+            <strong>Weekly Mapped</strong>
+          </div>
+          <div class="resource-row">
+            <span>UPSC Syllabuses</span>
+            <strong>Verified Solutions</strong>
+          </div>
+          <div class="resource-row">
+            <span>Banking Mocks</span>
+            <strong>Complete Practice</strong>
+          </div>
+          <div class="resource-row">
+            <span>SSC Prep Guides</span>
+            <strong>Quick Reference</strong>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -322,6 +369,77 @@
 
   </div>
 </div>
+
+<!-- ABOUT SECTION -->
+<section class="about-section">
+  <div class="container">
+    <div class="about-box">
+      <h2>About Yash Enterprises Online</h2>
+      <p>We are a premium online bookstore specializing in competitive exam preparation materials for UPSC, MPSC, SSC, Banking, and other entrance examinations. With a curated collection of study guides, practice papers, and revision materials, we help thousands of aspirants achieve their goals.</p>
+      <button class="btn-secondary">Learn More →</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section class="contact-section">
+  <div class="container">
+    <h2 class="section-title">Get Expert Assistance</h2>
+    <div class="contact-wrapper">
+      <form class="contact-form" onsubmit="submitForm(event)">
+        <input type="text" placeholder="Your Name" required/>
+        <input type="tel" placeholder="Contact Number" required/>
+        <textarea placeholder="Your Query or Order" rows="3" required></textarea>
+        <button type="submit" class="btn-primary">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ SECTION -->
+<section class="faq-section">
+  <div class="container">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <div class="faq-question">
+          <h4>How do I place an order?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>Browse our collection, add books to cart, proceed to checkout, enter delivery details, and complete payment via UPI. Your order will be delivered within 5-7 business days.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <h4>What are the delivery charges?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>Standard delivery is ₹49 (5-7 days), Express delivery is ₹99 (2-3 days), and Free delivery is available on orders above ₹999 (7-10 days).</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <h4>Do you offer refunds or exchanges?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>Yes, we offer 30-day money-back guarantee and free exchanges for damaged books. Contact us with your order details and photos.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <h4>Are the books latest editions?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>All books in our collection are from the latest editions. We regularly update our inventory to match the latest exam syllabuses.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- CONTACT -->
 <section class="contact" id="contact">
