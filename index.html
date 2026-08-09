@@ -30,7 +30,6 @@
       </div>
 
       <div class="header-actions">
-        <button class="lang-btn">हिंदी</button>
         <button class="cart-btn" onclick="toggleCart()">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
           <span class="cart-count" id="cartCount">0</span>
@@ -61,14 +60,6 @@
         Trending Books
       </h2>
       <p class="section-desc">Best sellers and most-read preparation materials</p>
-    </div>
-
-    <div class="filter-tabs">
-      <button class="tab-btn active" onclick="filterBooks('All')">All Books</button>
-      <button class="tab-btn" onclick="filterBooks('UPSC')">UPSC</button>
-      <button class="tab-btn" onclick="filterBooks('MPSC')">MPSC</button>
-      <button class="tab-btn" onclick="filterBooks('SSC')">SSC</button>
-      <button class="tab-btn" onclick="filterBooks('Banking')">Banking</button>
     </div>
 
     <div class="books-grid" id="booksGrid"></div>
@@ -438,24 +429,6 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="contact" id="contact">
-  <h2 class="section-title">Get In Touch</h2>
-  <div class="contact-grid">
-    <div class="contact-info">
-      <div class="info-item"><i class="fas fa-envelope"></i><a href="mailto:info@yashenterprisesonline.in">info@yashenterprisesonline.in</a></div>
-      <div class="info-item"><i class="fas fa-phone"></i><a href="tel:7020121893">+91 7020121893</a></div>
-      <div class="info-item"><i class="fas fa-map-marker-alt"></i><span>India</span></div>
-    </div>
-    <form class="contact-form" onsubmit="submitForm(event)">
-      <input type="text" placeholder="Your Name" required/>
-      <input type="email" placeholder="Your Email" required/>
-      <textarea placeholder="Your Message" rows="4" required></textarea>
-      <button type="submit" class="btn-primary">Send Message</button>
-    </form>
   </div>
 </section>
 
