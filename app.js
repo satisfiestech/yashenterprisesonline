@@ -47,7 +47,7 @@ function renderBooks(booksToRender) {
 // Filter books
 function filterBooks(category) {
   currentFilter = category;
-  
+
   // Update active tab
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.remove('active');
@@ -199,7 +199,7 @@ function setupFAQs() {
     question.addEventListener('click', function() {
       const faqItem = this.parentElement;
       const answer = faqItem.querySelector('.faq-answer');
-      
+
       // Close other FAQs
       document.querySelectorAll('.faq-item').forEach(item => {
         if (item !== faqItem) {
@@ -259,7 +259,7 @@ function openCheckout() {
     alert('Your cart is empty');
     return;
   }
-  
+
   const modal = document.getElementById('checkoutModal');
   if (modal) {
     modal.style.display = 'flex';
@@ -276,7 +276,7 @@ function closeCheckout() {
 function renderOrderReview() {
   const list = document.getElementById('orderReviewList');
   if (!list) return;
-  
+
   list.innerHTML = cart.map(item => `
     <div style="padding:12px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
       <div>
@@ -308,7 +308,58 @@ function updateDelivery(type) {
 }
 
 function placeOrder() {
-  const fname = document.getElementById('fname')?.value || 'Customer';
+  const fname  = document.getElementById('fname').value;
+  const lname  = document.getElementById('lname').value;
+  const name   = `${fname} ${lname}`;
+  const mobile = document.getElementById('mobile').value;
+  const email  = document.getElementById('email').value;
+  const address= document.getElementById('address').value;
+  const city   = document.getElementById('city').value;
+  const state  = document.getElementById('state').value;
+  const pin    = document.getElementById('pincode').value;
+  const landmark    = document.getElementById('landmark').value;
+  const instructions= document.getElementById('instructions').value;
+  const delivType   = document.querySelector('input[name="delivery"]:checked')?.value || 'standard';
+  const delivLabel  = { standard:'Standard (5–7 days)', express:'Express (2–3 days)', free:'Free (7–10 days)' };
+  const sub    = cart.reduce((s,c) => s+c.price*c.qty, 0);
+  const total  = sub + deliveryCharge;
+  const orderId= 'YEO' + Date.now().toString().slice(-6);
+  const datetime = new Date().toLocaleString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+  // ── Save order to localStorage + Google Sheet ──
+  const orderData = {
+    orderId, datetime, name, mobile, email, address, city, state, pin, landmark, instructions,
+    deliveryType: delivLabel[delivType],
+    items: cart.map(c => ({ id:c.id, title:c.title, author:c.author, category:c.category, price:c.price, qty:c.qty })),
+    itemCount: cart.reduce((s,c)=>s+c.qty, 0),
+    subtotal: sub, delivery: deliveryCharge, total,
+    status: 'Pending'
+  };
+  const existing = JSON.parse(localStorage.getItem('yeoOrders') || '[]');
+  existing.push(orderData);
+  localStorage.setItem('yeoOrders', JSON.stringify(existing));
+
+  // Send to Google Sheet via Apps Script Web App
+  if (window.APPS_SCRIPT_URL) {
+    fetch(window.APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',          // avoids CORS preflight — works on any domain
+      body: JSON.stringify(orderData)
+    }).catch(() => {}); // silent fail — order is already saved locally
+  }
+
+  // ── Show confirmation ──
+  document.getElementById('confirmMsg').textContent =
+    `Thank you, ${fname}! Your order #${orderId} has been placed.`;
+  document.getElementById('confirmDetails').innerHTML = `
+    <b>Order ID:</b> #${orderId}<br/>
+    <b>Items:</b> ${orderData.itemCount} book(s)<br/>
+    <b>Deliver to:</b> ${address}, ${city}, ${state} – ${pin}<br/>
+    <b>Mobile:</b> ${mobile}<br/>
+    <b>Payment:</b> UPI / QR Code<br/>
+    <b>Amount Paid:</b> ₹${total}<br/>
+    <b>Estimated Delivery:</b> ${deliveryCharge===99?'2–3':deliveryCharge===0?'7–10':'5–7'} business days
+  `;
   goStep(4);
   const confirmMsg = document.getElementById('confirmMsg');
   if (confirmMsg) {
