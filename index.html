@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yash Enterprises Online – Bookstore</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="#home" class="logo">
+    <img src="logo.svg" alt="Yash Enterprises Online" class="logo-img"/>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#featured">Books</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search books, authors..." oninput="searchBooks(this.value)" onkeydown="if(event.key==='Escape')clearSearch()"/>
+    <i class="fas fa-search search-icon"></i>
+    <button class="clear-btn" id="clearBtn" onclick="clearSearch()" style="display:none"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-icon" onclick="toggleCart()">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="cart-count" id="cartCount">0</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <h1>Discover Your Next<br/><span>Favourite Book</span></h1>
+    <p>Thousands of titles across every genre — delivered to your door.</p>
+    <a href="#featured" class="btn-primary">Shop Now</a>
+  </div>
+  <div class="hero-img">
+    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80" alt="Books"/>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories" id="categories">
+  <h2 class="section-title">Browse Categories</h2>
+  <div class="cat-grid">
+    <div class="cat-card" style="--c:#ff6b6b" onclick="filterBooks('Fiction')">
+      <i class="fas fa-dragon"></i><span>Fiction</span>
+    </div>
+    <div class="cat-card" style="--c:#feca57" onclick="filterBooks('Science')">
+      <i class="fas fa-flask"></i><span>Science</span>
+    </div>
+    <div class="cat-card" style="--c:#48dbfb" onclick="filterBooks('Children')">
+      <i class="fas fa-child"></i><span>Children</span>
+    </div>
+    <div class="cat-card" style="--c:#ff9ff3" onclick="filterBooks('Romance')">
+      <i class="fas fa-heart"></i><span>Romance</span>
+    </div>
+    <div class="cat-card" style="--c:#54a0ff" onclick="filterBooks('History')">
+      <i class="fas fa-history"></i><span>History</span>
+    </div>
+    <div class="cat-card" style="--c:#5f27cd" onclick="filterBooks('Self-Help')">
+      <i class="fas fa-brain"></i><span>Self-Help</span>
+    </div>
+    <div class="cat-card" style="--c:#e67e22" onclick="filterBooks('Competitive')">
+      <i class="fas fa-graduation-cap"></i><span>Competitive</span>
+    </div>
+    <div class="cat-card" style="--c:#00b894" onclick="filterBooks('Biography')">
+      <i class="fas fa-user-tie"></i><span>Biography</span>
+    </div>
+    <div class="cat-card" style="--c:#d63031" onclick="filterBooks('Religion')">
+      <i class="fas fa-om"></i><span>Religion</span>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED BOOKS -->
+<section class="featured" id="featured">
+  <h2 class="section-title">Featured Books</h2>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterBooks('All')">All</button>
+    <button class="filter-btn" onclick="filterBooks('Fiction')">Fiction</button>
+    <button class="filter-btn" onclick="filterBooks('Science')">Science</button>
+    <button class="filter-btn" onclick="filterBooks('Children')">Children</button>
+    <button class="filter-btn" onclick="filterBooks('Romance')">Romance</button>
+    <button class="filter-btn" onclick="filterBooks('History')">History</button>
+    <button class="filter-btn" onclick="filterBooks('Self-Help')">Self-Help</button>
+    <button class="filter-btn" onclick="filterBooks('Competitive')">Competitive</button>
+    <button class="filter-btn" onclick="filterBooks('Biography')">Biography</button>
+    <button class="filter-btn" onclick="filterBooks('Religion')">Religion</button>
+  </div>
+  <div class="books-grid" id="booksGrid"></div>
+  <div class="no-result" id="noResult">
+    <i class="fas fa-search"></i>
+    <p>No books found for your search.</p>
+    <button class="btn-primary" onclick="clearSearch()">Clear Search</button>
+  </div>
+</section>
+
+<!-- CART SIDEBAR -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+    <button onclick="toggleCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-totals">
+      <div class="cart-total-row"><span>Subtotal</span><strong id="cartTotal">₹0</strong></div>
+      <div class="cart-total-row delivery-row"><span>Delivery</span><strong id="cartDelivery">₹0</strong></div>
+      <div class="cart-total-row grand-row"><span>Grand Total</span><strong id="cartGrand">₹0</strong></div>
+    </div>
+    <button class="btn-checkout" onclick="openCheckout()"><i class="fas fa-lock"></i> Proceed to Checkout</button>
+  </div>
+</div>
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-modal" id="checkoutModal" onclick="closeCheckout()">
+  <div class="checkout-box" onclick="event.stopPropagation()">
+
+    <!-- Steps indicator -->
+    <div class="checkout-steps">
+      <div class="step active" id="step1ind"><span>1</span> Cart</div>
+      <div class="step-line"></div>
+      <div class="step" id="step2ind"><span>2</span> Delivery</div>
+      <div class="step-line"></div>
+      <div class="step" id="step3ind"><span>3</span> Payment</div>
+      <div class="step-line"></div>
+      <div class="step" id="step4ind"><span>4</span> Confirm</div>
+    </div>
+
+    <!-- STEP 1: Order Review -->
+    <div class="checkout-step" id="checkStep1">
+      <div class="checkout-header">
+        <h3><i class="fas fa-shopping-bag"></i> Order Review</h3>
+        <button class="close-modal" onclick="closeCheckout()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="order-review-list" id="orderReviewList"></div>
+      <div class="order-summary-box">
+        <div class="sum-row"><span>Subtotal</span><b id="rev-sub">₹0</b></div>
+        <div class="sum-row"><span>Delivery Charges</span><b id="rev-del">₹0</b></div>
+        <div class="sum-row total-sum"><span>Total Payable</span><b id="rev-total">₹0</b></div>
+      </div>
+      <button class="btn-next" onclick="goStep(2)">Continue to Delivery <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <!-- STEP 2: Delivery Details -->
+    <div class="checkout-step" id="checkStep2" style="display:none">
+      <div class="checkout-header">
+        <button class="back-btn" onclick="goStep(1)"><i class="fas fa-arrow-left"></i></button>
+        <h3><i class="fas fa-truck"></i> Delivery Details</h3>
+        <button class="close-modal" onclick="closeCheckout()"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="deliveryForm" onsubmit="return false">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name <span>*</span></label>
+            <input type="text" id="fname" placeholder="Rahul" required/>
+          </div>
+          <div class="form-group">
+            <label>Last Name <span>*</span></label>
+            <input type="text" id="lname" placeholder="Sharma" required/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Mobile Number <span>*</span></label>
+            <input type="tel" id="mobile" placeholder="+91 9876543210" maxlength="13" required/>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="rahul@email.com"/>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Full Address <span>*</span></label>
+          <input type="text" id="address" placeholder="House No., Street, Area" required/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City <span>*</span></label>
+            <input type="text" id="city" placeholder="Mumbai" required/>
+          </div>
+          <div class="form-group">
+            <label>State <span>*</span></label>
+            <select id="state" required>
+              <option value="">Select State</option>
+              <option>Andhra Pradesh</option><option>Arunachal Pradesh</option>
+              <option>Assam</option><option>Bihar</option><option>Chhattisgarh</option>
+              <option>Goa</option><option>Gujarat</option><option>Haryana</option>
+              <option>Himachal Pradesh</option><option>Jharkhand</option>
+              <option>Karnataka</option><option>Kerala</option>
+              <option>Madhya Pradesh</option><option>Maharashtra</option>
+              <option>Manipur</option><option>Meghalaya</option><option>Mizoram</option>
+              <option>Nagaland</option><option>Odisha</option><option>Punjab</option>
+              <option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option>
+              <option>Telangana</option><option>Tripura</option>
+              <option>Uttar Pradesh</option><option>Uttarakhand</option>
+              <option>West Bengal</option><option>Delhi</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>PIN Code <span>*</span></label>
+            <input type="text" id="pincode" placeholder="400001" maxlength="6" required/>
+          </div>
+          <div class="form-group">
+            <label>Landmark</label>
+            <input type="text" id="landmark" placeholder="Near school, temple..."/>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Delivery Instructions</label>
+          <textarea id="instructions" rows="2" placeholder="Any special delivery instructions..."></textarea>
+        </div>
+        <div class="delivery-options">
+          <p class="delivery-label">Delivery Type</p>
+          <label class="delivery-opt">
+            <input type="radio" name="delivery" value="standard" checked onchange="updateDelivery(this.value)"/>
+            <div class="opt-box">
+              <i class="fas fa-truck"></i>
+              <div><b>Standard Delivery</b><small>5–7 business days</small></div>
+              <span class="opt-price">₹49</span>
+            </div>
+          </label>
+          <label class="delivery-opt">
+            <input type="radio" name="delivery" value="express" onchange="updateDelivery(this.value)"/>
+            <div class="opt-box">
+              <i class="fas fa-bolt"></i>
+              <div><b>Express Delivery</b><small>2–3 business days</small></div>
+              <span class="opt-price">₹99</span>
+            </div>
+          </label>
+          <label class="delivery-opt">
+            <input type="radio" name="delivery" value="free" onchange="updateDelivery(this.value)"/>
+            <div class="opt-box">
+              <i class="fas fa-gift"></i>
+              <div><b>Free Delivery</b><small>Orders above ₹999 · 7–10 days</small></div>
+              <span class="opt-price free">FREE</span>
+            </div>
+          </label>
+        </div>
+      </form>
+      <button class="btn-next" onclick="validateDelivery()">Continue to Payment <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <!-- STEP 3: Payment -->
+    <div class="checkout-step" id="checkStep3" style="display:none">
+      <div class="checkout-header">
+        <button class="back-btn" onclick="goStep(2)"><i class="fas fa-arrow-left"></i></button>
+        <h3><i class="fas fa-credit-card"></i> Payment</h3>
+        <button class="close-modal" onclick="closeCheckout()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="payment-methods">
+        <label class="pay-opt">
+          <input type="radio" name="payment" value="upi" checked/>
+          <div class="pay-box">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/200px-UPI-Logo-vector.svg.png" alt="UPI" style="height:28px"/>
+            <span>UPI / GPay / PhonePe / Paytm</span>
+          </div>
+        </label>
+        <label class="pay-opt">
+          <input type="radio" name="payment" value="card"/>
+          <div class="pay-box">
+            <i class="fas fa-credit-card" style="color:#6c3483;font-size:1.4rem"></i>
+            <span>Credit / Debit Card</span>
+          </div>
+        </label>
+        <label class="pay-opt">
+          <input type="radio" name="payment" value="netbanking"/>
+          <div class="pay-box">
+            <i class="fas fa-university" style="color:#0984e3;font-size:1.4rem"></i>
+            <span>Net Banking</span>
+          </div>
+        </label>
+        <label class="pay-opt">
+          <input type="radio" name="payment" value="cod"/>
+          <div class="pay-box">
+            <i class="fas fa-money-bill-wave" style="color:#00b894;font-size:1.4rem"></i>
+            <span>Cash on Delivery</span>
+          </div>
+        </label>
+      </div>
+      <div class="pay-summary">
+        <div class="sum-row"><span>Subtotal</span><b id="pay-sub">₹0</b></div>
+        <div class="sum-row"><span>Delivery</span><b id="pay-del">₹0</b></div>
+        <div class="sum-row total-sum"><span>Total Payable</span><b id="pay-total">₹0</b></div>
+      </div>
+      <button class="btn-next" onclick="placeOrder()"><i class="fas fa-lock"></i> Place Order</button>
+    </div>
+
+    <!-- STEP 4: Confirmation -->
+    <div class="checkout-step" id="checkStep4" style="display:none">
+      <div class="confirm-wrap">
+        <div class="confirm-icon"><i class="fas fa-check-circle"></i></div>
+        <h2>Order Placed Successfully!</h2>
+        <p id="confirmMsg"></p>
+        <div class="confirm-details" id="confirmDetails"></div>
+        <button class="btn-next" onclick="closeCheckout()" style="margin-top:1.5rem">Continue Shopping <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <h2 class="section-title">Get In Touch</h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="info-item"><i class="fas fa-envelope"></i><a href="mailto:info@yashenterprisesonline.in">info@yashenterprisesonline.in</a></div>
+      <div class="info-item"><i class="fas fa-phone"></i><a href="tel:7020121893">+91 7020121893</a></div>
+      <div class="info-item"><i class="fas fa-map-marker-alt"></i><span>India</span></div>
+    </div>
+    <form class="contact-form" onsubmit="submitForm(event)">
+      <input type="text" placeholder="Your Name" required/>
+      <input type="email" placeholder="Your Email" required/>
+      <textarea placeholder="Your Message" rows="4" required></textarea>
+      <button type="submit" class="btn-primary">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="logo.svg" alt="Yash Enterprises Online" class="footer-logo"/>
+  <p>© 2025 Yash Enterprises Online. All rights reserved.</p>
+  <p><a href="mailto:info@yashenterprisesonline.in">info@yashenterprisesonline.in</a> | <a href="tel:7020121893">+91 7020121893</a></p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 70" width="260" height="70">
+  <defs>
+    <!-- Gold gradient for text -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f9d423;stop-opacity:1"/>
+      <stop offset="50%" style="stop-color:#f39c12;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#e67e22;stop-opacity:1"/>
+    </linearGradient>
+    <!-- Purple gradient for icon bg -->
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8e44ad;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#6c3483;stop-opacity:1"/>
+    </linearGradient>
+    <!-- Shine gradient for books -->
+    <linearGradient id="book1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e74c3c"/>
+      <stop offset="100%" style="stop-color:#c0392b"/>
+    </linearGradient>
+    <linearGradient id="book2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f39c12"/>
+      <stop offset="100%" style="stop-color:#d68910"/>
+    </linearGradient>
+    <linearGradient id="book3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#27ae60"/>
+      <stop offset="100%" style="stop-color:#1e8449"/>
+    </linearGradient>
+    <linearGradient id="book4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2980b9"/>
+      <stop offset="100%" style="stop-color:#1a5276"/>
+    </linearGradient>
+    <!-- Glow filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.4)"/>
+    </filter>
+  </defs>
+
+  <!-- Icon background circle -->
+  <circle cx="35" cy="35" r="30" fill="url(#purpleGrad)" filter="url(#shadow)"/>
+  <circle cx="35" cy="35" r="28" fill="none" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Book stack icon inside circle -->
+  <!-- Book 4 (back) -->
+  <rect x="16" y="38" width="38" height="7" rx="1.5" fill="url(#book4)" opacity="0.9"/>
+  <!-- Book 3 -->
+  <rect x="17" y="31" width="36" height="7" rx="1.5" fill="url(#book3)" opacity="0.95"/>
+  <!-- Book 2 -->
+  <rect x="18" y="24" width="34" height="7" rx="1.5" fill="url(#book2)"/>
+  <!-- Book 1 (top) -->
+  <rect x="19" y="17" width="32" height="7" rx="1.5" fill="url(#book1)"/>
+
+  <!-- Book spines (left edge lines) -->
+  <rect x="16" y="38" width="3" height="7" rx="1" fill="rgba(0,0,0,0.25)"/>
+  <rect x="17" y="31" width="3" height="7" rx="1" fill="rgba(0,0,0,0.25)"/>
+  <rect x="18" y="24" width="3" height="7" rx="1" fill="rgba(0,0,0,0.25)"/>
+  <rect x="19" y="17" width="3" height="7" rx="1" fill="rgba(0,0,0,0.25)"/>
+
+  <!-- Shine on top book -->
+  <rect x="24" y="18.5" width="20" height="2" rx="1" fill="rgba(255,255,255,0.35)"/>
+
+  <!-- Star accent -->
+  <text x="35" y="52" text-anchor="middle" font-size="7" fill="url(#goldGrad)" filter="url(#glow)">★ ★ ★</text>
+
+  <!-- Brand Name -->
+  <text x="75" y="28" font-family="Georgia, 'Times New Roman', serif" font-size="18" font-weight="bold"
+        fill="url(#goldGrad)" filter="url(#glow)" letter-spacing="0.5">YASH</text>
+
+  <text x="75" y="44" font-family="Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold"
+        fill="#ffffff" letter-spacing="1.5">ENTERPRISES</text>
+
+  <!-- Decorative line under ENTERPRISES -->
+  <line x1="75" y1="48" x2="210" y2="48" stroke="url(#goldGrad)" stroke-width="1" opacity="0.7"/>
+
+  <text x="75" y="60" font-family="'Arial', sans-serif" font-size="8.5" font-weight="400"
+        fill="#cccccc" letter-spacing="3">ONLINE BOOKSTORE</text>
+
+  <!-- Small decorative dots -->
+  <circle cx="215" cy="28" r="2.5" fill="url(#goldGrad)" opacity="0.8"/>
+  <circle cx="222" cy="28" r="1.5" fill="url(#goldGrad)" opacity="0.5"/>
+  <circle cx="227" cy="28" r="1" fill="url(#goldGrad)" opacity="0.3"/>
+</svg>
