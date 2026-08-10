@@ -1,18 +1,84 @@
 // Books database - Add your catalog later
 const books = [
-  { id: 1, title: "Sample Book Title", author: "Author Name", category: "UPSC", price: 499, oldPrice: 799, stars: 5, img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&q=80" }
+  { id: 1, title: "Sample Book Title", author: "Ganesh Janjal", category: "MPSC EXAM", price: 499, oldPrice: 799, stars: 5, img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&q=80" },
+  { id: 2, title: "ICDS महिला व बाल विकास", author: "Balasaheb Shinde", category: "MPSC EXAM", price: 500, oldPrice: 599, stars: 4.9, reviews: 120, img: "images/icds-mahila-bal-vikas.png" },
+  { id: 3, title: "English Grammar for Competitive Exams", author: "Balasaheb Shinde", category: "MPSC EXAM", price: 260, oldPrice: 350, stars: 4.9, reviews: 120, img: "images/balasaheb-shinde-book-2.png" }
 ];
 
 // Cart state
 let cart = [];
 let currentFilter = 'All';
 
+// Rotating Banner State
+let currentBannerIndex = 0;
+let bannerRotationInterval;
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   renderBooks(books);
   setupFAQs();
   loadCartFromStorage();
+  initializeRotatingBanner();
 });
+
+// Initialize rotating banner
+function initializeRotatingBanner() {
+  if (books.length === 0) return;
+  
+  // Render initial banner
+  updateBannerDisplay();
+  
+  // Create indicators
+  const indicatorsContainer = document.getElementById('bannerIndicators');
+  if (indicatorsContainer) {
+    indicatorsContainer.innerHTML = books.map((_, index) => 
+      `<div class="banner-indicator ${index === 0 ? 'active' : ''}" onclick="goToBookBanner(${index})"></div>`
+    ).join('');
+  }
+  
+  // Start auto-rotation every 5 seconds
+  if (bannerRotationInterval) clearInterval(bannerRotationInterval);
+  bannerRotationInterval = setInterval(() => {
+    currentBannerIndex = (currentBannerIndex + 1) % books.length;
+    updateBannerDisplay();
+  }, 5000);
+}
+
+// Update banner display with current book
+function updateBannerDisplay() {
+  const book = books[currentBannerIndex];
+  if (!book) return;
+  
+  document.getElementById('bannerTitle').textContent = book.title;
+  document.getElementById('bannerDesc').textContent = book.description || 'Essential reference textbook for competitive exams.';
+  document.getElementById('bannerImg').src = book.img;
+  document.getElementById('bannerLabel').textContent = book.category || 'FEATURED';
+  
+  // Update indicators
+  document.querySelectorAll('.banner-indicator').forEach((indicator, index) => {
+    indicator.classList.toggle('active', index === currentBannerIndex);
+  });
+}
+
+// Navigate to specific book in banner
+function goToBookBanner(index) {
+  if (index >= 0 && index < books.length) {
+    currentBannerIndex = index;
+    updateBannerDisplay();
+    
+    // Reset the interval
+    if (bannerRotationInterval) clearInterval(bannerRotationInterval);
+    bannerRotationInterval = setInterval(() => {
+      currentBannerIndex = (currentBannerIndex + 1) % books.length;
+      updateBannerDisplay();
+    }, 5000);
+  }
+}
+
+// View current banner book details
+function viewCurrentBannerBook() {
+  openBook(books[currentBannerIndex].id);
+}
 
 // Render books grid
 function renderBooks(booksToRender) {
@@ -33,9 +99,12 @@ function renderBooks(booksToRender) {
   noResult.style.display = 'none';
   grid.innerHTML = booksToRender.map(book => `
     <div class="book-card" data-category="${book.category}">
-      <img src="${book.img}" alt="${book.title}" class="book-image"/>
+      <div class="book-thumb">
+        <img src="${book.img}" alt="${book.title}" class="book-image" onclick="openBook(${book.id})"/>
+        <button class="quick-view" onclick="openBook(${book.id})">Quick View</button>
+      </div>
       <div class="book-info">
-        <h3 class="book-title">${book.title}</h3>
+        <h3 class="book-title" onclick="location.href='product.html?id=${book.id}'">${book.title}</h3>
         <p class="book-author">by ${book.author}</p>
         <div class="book-price">₹${book.price}</div>
         <button class="book-btn" onclick="addToCart(${book.id})">Add to Cart</button>
@@ -43,6 +112,94 @@ function renderBooks(booksToRender) {
     </div>
   `).join('');
 }
+
+
+
+// Open book detail modal
+function openBook(bookId) {
+  const book = books.find(b => b.id === bookId);
+  if (!book) return;
+  const modal = document.getElementById('bookModal');
+  document.getElementById('modalImg').src = book.img;
+  document.getElementById('modalTitle').textContent = book.title;
+  document.getElementById('modalAuthor').textContent = `by ${book.author}`;
+  document.getElementById('modalPrice').textContent = book.price;
+  document.getElementById('modalOldPrice').textContent = book.oldPrice ? `₹${book.oldPrice}` : '';
+  document.getElementById('modalStock').textContent = book.stock || 'IN STOCK & READY TO SHIP';
+  document.getElementById('modalBadge').textContent = book.category || '';
+  document.getElementById('modalDesc').textContent = book.description || book.title;
+
+  // extra specs
+  document.getElementById('modalPublisher').textContent = book.publisher || '';
+  document.getElementById('modalPages').textContent = book.pages || '';
+  document.getElementById('modalISBN').textContent = book.isbn || '';
+
+  // rating/reviews
+  document.getElementById('modalRating').textContent = book.stars ? `★ ${book.stars}` : '';
+  document.getElementById('modalReviews').textContent = book.reviews ? `(${book.reviews} reviews)` : '';
+
+  const highlights = book.highlights || ['Updated for 2026','Practice sets included'];
+  const ul = document.getElementById('modalHighlights');
+  ul.innerHTML = highlights.map(h => `<li>${h}</li>`).join('');
+
+  // View more link - if book has slug or link
+  const viewMore = document.getElementById('modalViewMore');
+  if (book.link) {
+    viewMore.href = book.link;
+    viewMore.style.display = 'inline-block';
+  } else {
+    viewMore.href = '#';
+    viewMore.style.display = 'none';
+  }
+
+  // store current open book id on modal element for later actions
+  modal.dataset.bookId = bookId;
+  modal.style.display = 'flex';
+}
+
+function closeBook() {
+  const modal = document.getElementById('bookModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function goToCart() {
+  // add if not present and open cart sidebar
+  const sidebar = document.getElementById('cartSidebar');
+  const overlay = document.getElementById('overlay');
+  if (sidebar && overlay) {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+  }
+  closeBook();
+}
+
+// modal quantity helpers
+function adjustQty(delta) {
+  const qtyEl = document.getElementById('modalQty');
+  let qty = Number(qtyEl.textContent || '1');
+  qty = Math.max(1, qty + delta);
+  qtyEl.textContent = qty;
+}
+
+// when adding from modal, add quantity
+function addToCartFromModal() {
+  const modal = document.getElementById('bookModal');
+  const id = Number(modal.dataset.bookId);
+  const qty = Number(document.getElementById('modalQty').textContent || '1');
+  const book = books.find(b=>b.id===id);
+  if (!book) return;
+  const existing = cart.find(i=>i.id===id);
+  if (existing) existing.quantity += qty; else cart.push({...book, quantity: qty});
+  saveCartToStorage();
+  updateCartUI();
+  showNotification(`Added "${book.title}" x${qty} to cart`);
+}
+
+function buyNowFromModal() {
+  addToCartFromModal();
+  openCheckout();
+}
+
 
 // Filter books
 function filterBooks(category) {
@@ -85,21 +242,21 @@ function clearSearch() {
   renderBooks(books);
 }
 
-// Add to cart
-function addToCart(bookId) {
+// Add to cart (accepts optional quantity)
+function addToCart(bookId, qty = 1) {
   const book = books.find(b => b.id === bookId);
   if (!book) return;
 
   const existingItem = cart.find(item => item.id === bookId);
   if (existingItem) {
-    existingItem.quantity += 1;
+    existingItem.quantity = (existingItem.quantity || 0) + Number(qty);
   } else {
-    cart.push({ ...book, quantity: 1 });
+    cart.push({ ...book, quantity: Number(qty) });
   }
 
   saveCartToStorage();
   updateCartUI();
-  showNotification(`Added "${book.title}" to cart`);
+  showNotification(`Added "${book.title}" x${qty} to cart`);
 }
 
 // Remove from cart
@@ -142,17 +299,31 @@ function renderCartItems() {
 // Update cart totals
 function updateCartTotals() {
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const delivery = subtotal > 999 ? 0 : subtotal > 0 ? 49 : 0;
-  const total = subtotal + delivery;
+  // fixed charges requested by user
+  const handling = subtotal > 0 ? 10 : 0; // ₹10 when there are items
+  const courier = subtotal > 0 ? 150 : 0; // ₹150 when there are items
+  const total = subtotal + handling + courier;
+
+  // expose values for other flows
+  window.cartSubtotal = subtotal;
+  window.handlingCharge = handling;
+  window.courierCharge = courier;
+  // removed deliveryCharge per request
+  window.cartGrandTotal = total;
 
   document.querySelectorAll('#cartTotal, #rev-sub, #pay-sub').forEach(el => {
     if (el) el.textContent = `₹${subtotal}`;
   });
 
-  document.querySelectorAll('#cartDelivery, #rev-del, #pay-del').forEach(el => {
-    if (el) el.textContent = `₹${delivery}`;
+  // handling and courier
+  document.querySelectorAll('#cartHandling, #rev-handling, #pay-handling').forEach(el => {
+    if (el) el.textContent = `₹${handling}`;
+  });
+  document.querySelectorAll('#cartCourier, #rev-courier, #pay-courier').forEach(el => {
+    if (el) el.textContent = `₹${courier}`;
   });
 
+  // update totals display
   document.querySelectorAll('#cartGrand, #rev-total, #pay-total, #qr-amount, #qr-amount2').forEach(el => {
     if (el) el.textContent = `₹${total}`;
   });
@@ -321,18 +492,23 @@ function placeOrder() {
   const instructions= document.getElementById('instructions').value;
   const delivType   = document.querySelector('input[name="delivery"]:checked')?.value || 'standard';
   const delivLabel  = { standard:'Standard (5–7 days)', express:'Express (2–3 days)', free:'Free (7–10 days)' };
-  const sub    = cart.reduce((s,c) => s+c.price*c.qty, 0);
-  const total  = sub + deliveryCharge;
-  const orderId= 'YEO' + Date.now().toString().slice(-6);
+  const sub = cart.reduce((s,c) => s + (c.price * c.quantity), 0);
+  // use computed fixed charges
+  const handling = window.handlingCharge != null ? window.handlingCharge : (sub > 0 ? 10 : 0);
+  const courier = window.courierCharge != null ? window.courierCharge : (sub > 0 ? 150 : 0);
+  const total = sub + handling + courier;
+  const orderId = 'YEO' + Date.now().toString().slice(-6);
   const datetime = new Date().toLocaleString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
 
   // ── Save order to localStorage + Google Sheet ──
   const orderData = {
     orderId, datetime, name, mobile, email, address, city, state, pin, landmark, instructions,
     deliveryType: delivLabel[delivType],
-    items: cart.map(c => ({ id:c.id, title:c.title, author:c.author, category:c.category, price:c.price, qty:c.qty })),
-    itemCount: cart.reduce((s,c)=>s+c.qty, 0),
-    subtotal: sub, delivery: deliveryCharge, total,
+    handling, courier,
+
+    items: cart.map(c => ({ id:c.id, title:c.title, author:c.author, category:c.category, price:c.price, qty:c.quantity })),
+    itemCount: cart.reduce((s,c)=>s+c.quantity, 0),
+    subtotal: sub, handling, courier, total,
     status: 'Pending'
   };
   const existing = JSON.parse(localStorage.getItem('yeoOrders') || '[]');
@@ -358,7 +534,7 @@ function placeOrder() {
     <b>Mobile:</b> ${mobile}<br/>
     <b>Payment:</b> UPI / QR Code<br/>
     <b>Amount Paid:</b> ₹${total}<br/>
-    <b>Estimated Delivery:</b> ${deliveryCharge===99?'2–3':deliveryCharge===0?'7–10':'5–7'} business days
+    <b>Charges:</b> Handling ₹${handling}, Courier ₹${courier}<br/>
   `;
   goStep(4);
   const confirmMsg = document.getElementById('confirmMsg');
@@ -370,3 +546,67 @@ function placeOrder() {
   updateCartUI();
   setTimeout(() => closeCheckout(), 3000);
 }
+
+// --- Product page rendering (product.html?id=) ---
+(function renderProductPageIfNeeded(){
+  try{
+    const root = document.getElementById('productRoot');
+    if (!root) return;
+    // read id from query
+    const params = new URLSearchParams(location.search);
+    const id = Number(params.get('id')) || null;
+    const book = id ? books.find(b=>b.id===id) : null;
+    if (!book) {
+      root.innerHTML = '<p>Product not found. <a href="index.html">Go back</a></p>';
+      return;
+    }
+
+    root.innerHTML = `
+      <div class="product-grid">
+        <div class="product-left">
+          <img src="${book.img}" alt="${book.title}"/>
+        </div>
+        <div class="product-right">
+          <a href="index.html" class="back-link">← Back to catalog</a>
+          <div class="badge">${book.category || ''}</div>
+          <h1 class="product-title">${book.title}</h1>
+          <p class="product-author">by ${book.author}</p>
+          <div class="product-rating">${book.stars? '★ '+book.stars : ''} ${book.reviews? '('+book.reviews+' reviews)':''}</div>
+
+          <div class="product-price-row">
+            <div class="product-price">₹${book.price}</div>
+            <div class="product-oldprice">${book.oldPrice? '₹'+book.oldPrice : ''}</div>
+            <div class="product-stock">${book.stock || 'IN STOCK & READY TO SHIP'}</div>
+          </div>
+
+          <div class="product-specs">
+            <div><strong>Publisher:</strong> ${book.publisher || '—'}</div>
+            <div><strong>Pages:</strong> ${book.pages || '—'}</div>
+            <div><strong>ISBN:</strong> ${book.isbn || '—'}</div>
+          </div>
+
+          <h3>Book Description</h3>
+          <p class="product-desc">${book.description || ''}</p>
+
+          <h3>Key Highlights</h3>
+          <ul class="product-highlights">${(book.highlights||[]).map(h=>'<li>'+h+'</li>').join('')}</ul>
+
+          <div class="product-actions">
+            <div class="qty">
+              <label>Qty</label>
+              <button onclick="(function(){const el=document.getElementById('prodQty');let v=Number(el.textContent);el.textContent=Math.max(1,v-1);})()">-</button>
+              <span id="prodQty">1</span>
+              <button onclick="(function(){const el=document.getElementById('prodQty');let v=Number(el.textContent);el.textContent=v+1;})()">+</button>
+            </div>
+            <div class="action-buttons">
+                    <button class="btn-add" onclick="(function(){ const qty=Number(document.getElementById('prodQty').textContent||'1'); addToCart(${book.id}, qty); alert('Added to cart'); })()">Add to Cart</button>
+                    <button class="btn-buy" onclick="(function(){ const qty=Number(document.getElementById('prodQty').textContent||'1'); addToCart(${book.id}, qty); openCheckout(); })()">Buy Now</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+  }catch(e){ console.error(e); }
+})();

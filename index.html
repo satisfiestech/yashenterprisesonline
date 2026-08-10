@@ -18,12 +18,12 @@
     <div class="header-content">
       <a href="#" class="logo-section">
         <img src="logo.svg" alt="Yash Enterprises" class="logo"/>
-        <div class="logo-text">
+        <!--<div class="logo-text">
           <h1 class="brand-name">Yash Enterprises</h1>
           <p class="brand-tagline">Premium Book Hub</p>
-        </div>
+        </div>-->
       </a>
-      
+
       <div class="search-wrapper">
         <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
         <input type="text" id="searchInput" class="search-input" placeholder="Search books, authors..." oninput="searchBooks(this.value)"/>
@@ -40,7 +40,7 @@
 </header>
 
 <!-- HERO BANNER -->
-<section class="hero-banner">
+<!--<section class="hero-banner">
   <div class="banner-content">
     <div class="banner-text">
       <span class="banner-badge">Yash Exclusive Collection</span>
@@ -49,6 +49,23 @@
       <button class="btn-browse">Browse Collection</button>
     </div>
   </div>
+</section>-->
+
+<!-- ROTATING FEATURED BOOK BANNER -->
+<section class="rotating-book-banner">
+  <div class="banner-container">
+    <div class="banner-text-side">
+      <span class="banner-badge">Yash Exclusive Collection</span></br>
+      <span class="banner-label" id="bannerLabel">YASH EXCLUSIVE MATERIALS</span>
+      <h3 class="banner-book-title" id="bannerTitle">Book Title</h3>
+      <p class="banner-book-desc" id="bannerDesc">Book description here</p>
+      <button class="btn-banner" onclick="viewCurrentBannerBook()">View Details</button>
+    </div>
+    <div class="banner-image-side">
+      <img src="" alt="Featured Book" class="banner-book-img" id="bannerImg"/>
+    </div>
+  </div>
+  <div class="banner-indicators" id="bannerIndicators"></div>
 </section>
 
 <!-- FEATURED BOOKS SECTION -->
@@ -148,9 +165,10 @@
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-footer">
     <div class="cart-totals">
-      <div class="cart-total-row"><span>Subtotal</span><strong id="cartTotal">₹0</strong></div>
-      <div class="cart-total-row delivery-row"><span>Delivery</span><strong id="cartDelivery">₹0</strong></div>
-      <div class="cart-total-row grand-row"><span>Grand Total</span><strong id="cartGrand">₹0</strong></div>
+    <div class="cart-total-row"><span>Books Subtotal</span><strong id="cartTotal">₹0</strong></div>
+    <div class="cart-total-row"><span>Handling Charges</span><strong id="cartHandling">₹0</strong></div>
+    <div class="cart-total-row"><span>Courier Charges</span><strong id="cartCourier">₹0</strong></div>
+    <div class="cart-total-row grand-row"><span>Grand Total</span><strong id="cartGrand">₹0</strong></div>
     </div>
     <button class="btn-checkout" onclick="openCheckout()"><i class="fas fa-lock"></i> Proceed to Checkout</button>
   </div>
@@ -180,9 +198,10 @@
       </div>
       <div class="order-review-list" id="orderReviewList"></div>
       <div class="order-summary-box">
-        <div class="sum-row"><span>Subtotal</span><b id="rev-sub">₹0</b></div>
-        <div class="sum-row"><span>Delivery Charges</span><b id="rev-del">₹0</b></div>
-        <div class="sum-row total-sum"><span>Total Payable</span><b id="rev-total">₹0</b></div>
+      <div class="sum-row"><span>Books Subtotal</span><b id="rev-sub">₹0</b></div>
+      <div class="sum-row"><span>Handling Charges</span><b id="rev-handling">₹0</b></div>
+      <div class="sum-row"><span>Courier Charges</span><b id="rev-courier">₹0</b></div>
+      <div class="sum-row total-sum"><span>Total Payable</span><b id="rev-total">₹0</b></div>
       </div>
       <button class="btn-next" onclick="goStep(2)">Continue to Delivery <i class="fas fa-arrow-right"></i></button>
     </div>
@@ -257,33 +276,6 @@
           <label>Delivery Instructions</label>
           <textarea id="instructions" rows="2" placeholder="Any special delivery instructions..."></textarea>
         </div>
-        <div class="delivery-options">
-          <p class="delivery-label">Delivery Type</p>
-          <label class="delivery-opt">
-            <input type="radio" name="delivery" value="standard" checked onchange="updateDelivery(this.value)"/>
-            <div class="opt-box">
-              <i class="fas fa-truck"></i>
-              <div><b>Standard Delivery</b><small>5–7 business days</small></div>
-              <span class="opt-price">₹49</span>
-            </div>
-          </label>
-          <label class="delivery-opt">
-            <input type="radio" name="delivery" value="express" onchange="updateDelivery(this.value)"/>
-            <div class="opt-box">
-              <i class="fas fa-bolt"></i>
-              <div><b>Express Delivery</b><small>2–3 business days</small></div>
-              <span class="opt-price">₹99</span>
-            </div>
-          </label>
-          <label class="delivery-opt">
-            <input type="radio" name="delivery" value="free" onchange="updateDelivery(this.value)"/>
-            <div class="opt-box">
-              <i class="fas fa-gift"></i>
-              <div><b>Free Delivery</b><small>Orders above ₹999 · 7–10 days</small></div>
-              <span class="opt-price free">FREE</span>
-            </div>
-          </label>
-        </div>
       </form>
       <button class="btn-next" onclick="validateDelivery()">Continue to Payment <i class="fas fa-arrow-right"></i></button>
     </div>
@@ -336,8 +328,9 @@
 
         <!-- Pay summary -->
         <div class="pay-summary">
-          <div class="sum-row"><span>Subtotal</span><b id="pay-sub">₹0</b></div>
-          <div class="sum-row"><span>Delivery</span><b id="pay-del">₹0</b></div>
+          <div class="sum-row"><span>Books Subtotal</span><b id="pay-sub">₹0</b></div>
+          <div class="sum-row"><span>Handling Charges</span><b id="pay-handling">₹0</b></div>
+          <div class="sum-row"><span>Courier Charges</span><b id="pay-courier">₹0</b></div>
           <div class="sum-row total-sum"><span>Total Payable</span><b id="pay-total">₹0</b></div>
         </div>
 
@@ -367,7 +360,10 @@
     <div class="about-box">
       <h2>About Yash Enterprises Online</h2>
       <p>We are a premium online bookstore specializing in competitive exam preparation materials for UPSC, MPSC, SSC, Banking, and other entrance examinations. With a curated collection of study guides, practice papers, and revision materials, we help thousands of aspirants achieve their goals.</p>
-      <button class="btn-secondary">Learn More →</button>
+      <div class="about-actions">
+        <button class="btn-secondary">Read More →</button>
+        <a href="/about" class="about-link">Go to About Page →</a>
+      </div>
     </div>
   </div>
 </section>
@@ -432,10 +428,74 @@
   </div>
 </section>
 
+<!-- BOOK DETAILS MODAL -->
+<div class="book-modal" id="bookModal" style="display:none;">
+  <div class="modal-overlay" onclick="closeBook()"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Quick View</h3>
+      <button class="modal-close" onclick="closeBook()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-left">
+        <img id="modalImg" src="" alt="Book cover"/>
+      </div>
+      <div class="modal-right">
+        <div class="modal-meta"><span class="badge" id="modalBadge">Category</span></div>
+        <h2 id="modalTitle">Book Title</h2>
+
+        <div class="modal-submeta">
+          <span class="modal-author" id="modalAuthor">by Someone</span>
+          <span class="modal-rating" id="modalRating">★ 4.9</span>
+          <span class="modal-reviews" id="modalReviews">(120 reviews)</span>
+        </div>
+
+        <div class="modal-price-row">
+          <div class="modal-price">₹<span id="modalPrice">0</span></div>
+          <div class="modal-oldprice" id="modalOldPrice">₹0</div>
+          <div class="modal-stock" id="modalStock">IN STOCK & READY TO SHIP</div>
+        </div>
+
+        <div class="modal-specs">
+          <div><strong>Publisher:</strong> <span id="modalPublisher"></span></div>
+          <div><strong>Pages:</strong> <span id="modalPages"></span></div>
+          <div><strong>ISBN:</strong> <span id="modalISBN"></span></div>
+        </div>
+
+        <h4>Book Description</h4>
+        <p id="modalDesc">Short description goes here.</p>
+
+        <h4>Key Highlights</h4>
+        <ul id="modalHighlights">
+          <li>Updated for 2026</li>
+          <li>Practice sets included</li>
+        </ul>
+
+        <div class="modal-footer-note">100% Genuine Exam Books • Direct Dispatch from Anand Publications</div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="quantity-row">
+        <label>Quantity:</label>
+        <button onclick="adjustQty(-1)">-</button>
+        <span id="modalQty">1</span>
+        <button onclick="adjustQty(1)">+</button>
+      </div>
+      <div class="modal-actions-fixed">
+        <button class="btn-add" id="modalAddBtn" onclick="addToCartFromModal()"><i class="fas fa-shopping-cart"></i> ADD TO CART</button>
+        <button class="btn-viewmore" id="modalViewMore">VIEW MORE</button>
+        <button class="btn-go-cart" onclick="goToCart()">GO TO CART</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <img src="logo.svg" alt="Yash Enterprises Online" class="footer-logo"/>
-  <p>© 2025 Yash Enterprises Online. All rights reserved.</p>
+  <p>© 2026 Yash Enterprises Online. All rights reserved.</p>
   <p><a href="mailto:info@yashenterprisesonline.in">info@yashenterprisesonline.in</a> | <a href="tel:7020121893">+91 7020121893</a></p>
 </footer>
 
