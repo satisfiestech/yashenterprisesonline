@@ -7,6 +7,8 @@ const books = [
 
 // Cart state
 let cart = [];
+const HANDLING_PER_BOOK = 10;
+const COURIER_PER_BOOK = 150;
 let currentFilter = 'All';
 
 // Rotating Banner State
@@ -266,6 +268,18 @@ function removeFromCart(bookId) {
   updateCartUI();
 }
 
+function updateCartQuantity(bookId, change) {
+  const item = cart.find(cartItem => cartItem.id === bookId);
+  if (!item) return;
+
+  item.quantity += change;
+  if (item.quantity <= 0) removeFromCart(bookId);
+  else {
+    saveCartToStorage();
+    updateCartUI();
+  }
+}
+
 // Update cart UI
 function updateCartUI() {
   const cartCount = document.getElementById('cartCount');
@@ -286,12 +300,19 @@ function renderCartItems() {
   }
 
   cartItemsContainer.innerHTML = cart.map(item => `
-    <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #eee;">
-      <div style="flex:1;">
-        <p style="font-weight:600; margin-bottom:4px;">${item.title}</p>
-        <p style="color:#666; font-size:12px;">₹${item.price} × ${item.quantity}</p>
+    <div class="cart-item">
+      <div class="cart-item-details">
+        <p class="cart-item-title">${item.title}</p>
+        <p class="cart-item-price">₹${item.price} each</p>
       </div>
-      <button onclick="removeFromCart(${item.id})" style="background:none; border:none; color:#e74c3c; cursor:pointer; font-size:18px;">×</button>
+      <div class="cart-item-actions">
+        <div class="cart-quantity-controls" aria-label="Quantity for ${item.title}">
+          <button type="button" onclick="updateCartQuantity(${item.id}, -1)" aria-label="Decrease quantity">−</button>
+          <span>${item.quantity}</span>
+          <button type="button" onclick="updateCartQuantity(${item.id}, 1)" aria-label="Increase quantity">+</button>
+        </div>
+        <button class="remove-cart-item" type="button" onclick="removeFromCart(${item.id})" aria-label="Remove ${item.title}">×</button>
+      </div>
     </div>
   `).join('');
 }
@@ -299,9 +320,9 @@ function renderCartItems() {
 // Update cart totals
 function updateCartTotals() {
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  // fixed charges requested by user
-  const handling = subtotal > 0 ? 10 : 0; // ₹10 when there are items
-  const courier = subtotal > 0 ? 150 : 0; // ₹150 when there are items
+  const totalBooks = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const handling = totalBooks * HANDLING_PER_BOOK;
+  const courier = totalBooks * COURIER_PER_BOOK;
   const total = subtotal + handling + courier;
 
   // expose values for other flows
@@ -311,20 +332,20 @@ function updateCartTotals() {
   // removed deliveryCharge per request
   window.cartGrandTotal = total;
 
-  document.querySelectorAll('#cartTotal, #rev-sub, #pay-sub').forEach(el => {
+  document.querySelectorAll('#cartTotal, #rev-sub, #delivery-sub, #pay-sub').forEach(el => {
     if (el) el.textContent = `₹${subtotal}`;
   });
 
   // handling and courier
-  document.querySelectorAll('#cartHandling, #rev-handling, #pay-handling').forEach(el => {
+  document.querySelectorAll('#delivery-handling, #pay-handling').forEach(el => {
     if (el) el.textContent = `₹${handling}`;
   });
-  document.querySelectorAll('#cartCourier, #rev-courier, #pay-courier').forEach(el => {
+  document.querySelectorAll('#delivery-courier, #pay-courier').forEach(el => {
     if (el) el.textContent = `₹${courier}`;
   });
 
   // update totals display
-  document.querySelectorAll('#cartGrand, #rev-total, #pay-total, #qr-amount, #qr-amount2').forEach(el => {
+  document.querySelectorAll('#delivery-total, #pay-total, #qr-amount, #qr-amount2').forEach(el => {
     if (el) el.textContent = `₹${total}`;
   });
 
@@ -493,9 +514,9 @@ function placeOrder() {
   const delivType   = document.querySelector('input[name="delivery"]:checked')?.value || 'standard';
   const delivLabel  = { standard:'Standard (5–7 days)', express:'Express (2–3 days)', free:'Free (7–10 days)' };
   const sub = cart.reduce((s,c) => s + (c.price * c.quantity), 0);
-  // use computed fixed charges
-  const handling = window.handlingCharge != null ? window.handlingCharge : (sub > 0 ? 10 : 0);
-  const courier = window.courierCharge != null ? window.courierCharge : (sub > 0 ? 150 : 0);
+  const totalBooks = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const handling = window.handlingCharge != null ? window.handlingCharge : totalBooks * HANDLING_PER_BOOK;
+  const courier = window.courierCharge != null ? window.courierCharge : totalBooks * COURIER_PER_BOOK;
   const total = sub + handling + courier;
   const orderId = 'YEO' + Date.now().toString().slice(-6);
   const datetime = new Date().toLocaleString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
@@ -562,12 +583,14 @@ function placeOrder() {
     }
 
     root.innerHTML = `
+      <a href="index.html" class="back-to-books" onclick="if (window.history.length > 1) { window.history.back(); return false; }">
+        <i class="fas fa-arrow-left"></i><span>Home</span>
+      </a>
       <div class="product-grid">
         <div class="product-left">
           <img src="${book.img}" alt="${book.title}"/>
         </div>
         <div class="product-right">
-          <a href="index.html" class="back-link">← Back to catalog</a>
           <div class="badge">${book.category || ''}</div>
           <h1 class="product-title">${book.title}</h1>
           <p class="product-author">by ${book.author}</p>

@@ -17,7 +17,7 @@
   <div class="container">
     <div class="header-content">
       <a href="#" class="logo-section">
-        <img src="logo.svg" alt="Yash Enterprises" class="logo"/>
+        <img src="logo.png" alt="Yash Enterprises" class="logo"/>
         <!--<div class="logo-text">
           <h1 class="brand-name">Yash Enterprises</h1>
           <p class="brand-tagline">Premium Book Hub</p>
@@ -165,10 +165,7 @@
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-footer">
     <div class="cart-totals">
-    <div class="cart-total-row"><span>Books Subtotal</span><strong id="cartTotal">₹0</strong></div>
-    <div class="cart-total-row"><span>Handling Charges</span><strong id="cartHandling">₹0</strong></div>
-    <div class="cart-total-row"><span>Courier Charges</span><strong id="cartCourier">₹0</strong></div>
-    <div class="cart-total-row grand-row"><span>Grand Total</span><strong id="cartGrand">₹0</strong></div>
+      <div class="cart-total-row grand-row"><span>Books Total</span><strong id="cartTotal">₹0</strong></div>
     </div>
     <button class="btn-checkout" onclick="openCheckout()"><i class="fas fa-lock"></i> Proceed to Checkout</button>
   </div>
@@ -198,10 +195,7 @@
       </div>
       <div class="order-review-list" id="orderReviewList"></div>
       <div class="order-summary-box">
-      <div class="sum-row"><span>Books Subtotal</span><b id="rev-sub">₹0</b></div>
-      <div class="sum-row"><span>Handling Charges</span><b id="rev-handling">₹0</b></div>
-      <div class="sum-row"><span>Courier Charges</span><b id="rev-courier">₹0</b></div>
-      <div class="sum-row total-sum"><span>Total Payable</span><b id="rev-total">₹0</b></div>
+        <div class="sum-row total-sum"><span>Books Total</span><b id="rev-sub">₹0</b></div>
       </div>
       <button class="btn-next" onclick="goStep(2)">Continue to Delivery <i class="fas fa-arrow-right"></i></button>
     </div>
@@ -277,6 +271,13 @@
           <textarea id="instructions" rows="2" placeholder="Any special delivery instructions..."></textarea>
         </div>
       </form>
+      <div class="order-summary-box delivery-charge-summary">
+        <p class="charge-summary-title">Order Charges Breakdown</p>
+        <div class="sum-row"><span>Books Subtotal</span><b id="delivery-sub">₹0</b></div>
+        <div class="sum-row"><span>Handling Charges</span><b id="delivery-handling">₹0</b></div>
+        <div class="sum-row"><span>Courier Charges</span><b id="delivery-courier">₹0</b></div>
+        <div class="sum-row total-sum"><span>Grand Total</span><b id="delivery-total">₹0</b></div>
+      </div>
       <button class="btn-next" onclick="validateDelivery()">Continue to Payment <i class="fas fa-arrow-right"></i></button>
     </div>
 
@@ -494,7 +495,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <img src="logo.svg" alt="Yash Enterprises Online" class="footer-logo"/>
+  <img src="logo.png" alt="Yash Enterprises Online" class="footer-logo"/>
   <p>© 2026 Yash Enterprises Online. All rights reserved.</p>
   <p><a href="mailto:info@yashenterprisesonline.in">info@yashenterprisesonline.in</a> | <a href="tel:7020121893">+91 7020121893</a></p>
 </footer>
