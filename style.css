@@ -47,21 +47,53 @@ body {
 
 /* ==================== ORIGINAL BOOKS TRUST BAR ==================== */
 .original-books-bar {
+  position: relative;
+  overflow: hidden;
   min-height: 38px;
   padding: 8px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background: var(--color-brand-accent);
+  background: #ff4d0a;
   color: var(--color-white);
   font-size: 13px;
   font-weight: 700;
   text-align: center;
 }
 
-.original-books-bar i {
-  font-size: 15px;
+.original-books-bar::before,
+.original-books-bar::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.42);
+  font-family: "Font Awesome 6 Free";
+  font-size: 34px;
+  font-weight: 400;
+  content: "\f02d";
+}
+
+.original-books-bar::before {
+  left: 28px;
+}
+
+.original-books-bar::after {
+  right: 28px;
+}
+
+.original-books-bar span {
+  position: relative;
+  z-index: 1;
+  animation: trust-message-slide 7s ease-in-out infinite alternate;
+}
+
+@keyframes trust-message-slide {
+  from {
+    transform: translateX(-28vw);
+  }
+  to {
+    transform: translateX(28vw);
+  }
 }
 
 /* ==================== HEADER ==================== */
@@ -251,6 +283,28 @@ body {
     min-height: 34px;
     padding: 7px 12px;
     font-size: 11px;
+  }
+
+  .original-books-bar::before,
+  .original-books-bar::after {
+    font-size: 24px;
+  }
+
+  .original-books-bar::before {
+    left: 8px;
+  }
+
+  .original-books-bar::after {
+    right: 8px;
+  }
+
+  @keyframes trust-message-slide {
+    from {
+      transform: translateX(-18vw);
+    }
+    to {
+      transform: translateX(18vw);
+    }
   }
 }
 
