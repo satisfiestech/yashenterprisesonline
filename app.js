@@ -1,8 +1,7 @@
 // Books database - Add your catalog later
 const books = [
-  { id: 1, title: "Sample Book Title", author: "Ganesh Janjal", category: "MPSC EXAM", price: 499, oldPrice: 799, stars: 5, img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&q=80" },
-  { id: 2, title: "ICDS महिला व बाल विकास", author: "Balasaheb Shinde", category: "MPSC EXAM", price: 500, oldPrice: 599, stars: 4.9, reviews: 120, img: "images/icds-mahila-bal-vikas.png" },
-  { id: 3, title: "English Grammar for Competitive Exams", author: "Balasaheb Shinde", category: "MPSC EXAM", price: 260, oldPrice: 350, stars: 4.9, reviews: 120, img: "images/balasaheb-shinde-book-2.png" }
+  { id: 1, title: "बुद्धिमत्ता - Basic to Advanced", author: "प्रा. सतीश वसे", category: "MPSC EXAM", price: 560, oldPrice: 599, stars: 4.9, reviews: 120, img: "images/buddhimatta-basic-to-advanced.png" },
+  { id: 2, title: "FASTRACK MATHS - Basic to Advance (APTI)", author: "प्रा. सतीश वसे", category: "MPSC EXAM", price: 560, oldPrice: 599, stars: 4.9, reviews: 120, img: "images/fastrack-maths.png" }
 ];
 
 // Cart state

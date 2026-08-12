@@ -45,6 +45,25 @@ body {
   padding: 0 20px;
 }
 
+/* ==================== ORIGINAL BOOKS TRUST BAR ==================== */
+.original-books-bar {
+  min-height: 38px;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--color-brand-accent);
+  color: var(--color-white);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.original-books-bar i {
+  font-size: 15px;
+}
+
 /* ==================== HEADER ==================== */
 .header {
   position: sticky;
@@ -226,6 +245,12 @@ body {
   .hero-banner {
     min-height: 250px;
     padding: 32px 16px;
+  }
+
+  .original-books-bar {
+    min-height: 34px;
+    padding: 7px 12px;
+    font-size: 11px;
   }
 }
 
