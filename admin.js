@@ -34,6 +34,8 @@ function initDashboard() {
   renderMiniStats();
   renderTable();
   fetchOrdersFromSheet();
+  // Auto-poll every 30s so orders from any device appear automatically
+  setInterval(fetchOrdersFromSheet, 30000);
 }
 
 // ── ORDERS: Google Sheet (primary) + localStorage (fallback) ──
@@ -45,22 +47,28 @@ function saveOrders(orders) {
 }
 
 async function fetchOrdersFromSheet() {
-  if (!window.APPS_SCRIPT_URL || window.APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL') return;
+  const urlBanner = document.getElementById('urlWarning');
+  if (!window.APPS_SCRIPT_URL || window.APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL') {
+    if (urlBanner) urlBanner.style.display = 'flex';
+    setSheetStatus('⚠️ Apps Script URL not set. Orders from other devices will not sync.');
+    return;
+  }
+  if (urlBanner) urlBanner.style.display = 'none';
   const btn = document.querySelector('.btn-refresh');
   if (btn) btn.classList.add('spinning');
   try {
-    const res  = await fetch(window.APPS_SCRIPT_URL);
+    const res  = await fetch(window.APPS_SCRIPT_URL + '?t=' + Date.now()); // cache-bust
     const data = await res.json();
-    if (data.success && data.orders.length) {
-      saveOrders(data.orders);
+    if (data.success) {
+      saveOrders(data.orders);  // replace local cache with sheet data (source of truth)
       renderMiniStats();
       renderTable();
       setSheetStatus(`✅ Synced ${data.orders.length} orders from Google Sheet — ${new Date().toLocaleTimeString('en-IN')}`);
     } else {
-      setSheetStatus('ℹ️ No orders in Google Sheet yet.');
+      setSheetStatus('⚠️ Sheet returned an error: ' + (data.error || 'unknown'));
     }
   } catch (e) {
-    setSheetStatus('⚠️ Could not reach Google Sheet. Showing local data.');
+    setSheetStatus('⚠️ Could not reach Google Sheet. Showing last synced data.');
   } finally {
     if (btn) btn.classList.remove('spinning');
   }
@@ -138,12 +146,20 @@ function renderTable() {
       <td style="white-space:nowrap;font-size:.78rem">${o.datetime || '—'}</td>
       <td><span class="customer-name">${o.name}</span></td>
       <td>${o.mobile}</td>
-      <td>${o.city}, ${o.state}</td>
+      <td>${o.email || '—'}</td>
+      <td style="max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${o.address || ''}">${o.address || '—'}</td>
+      <td>${o.city}</td>
+      <td>${o.state}</td>
       <td>${o.pin}</td>
+      <td>${o.landmark || '—'}</td>
+      <td style="white-space:nowrap;font-size:.78rem">${o.deliveryType || 'Standard'}</td>
+      <td style="max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${o.instructions || ''}">${o.instructions || '—'}</td>
       <td class="books-cell"><small>${booksShort}</small></td>
       <td style="text-align:center">${o.itemCount}</td>
+      <td>₹${o.subtotal}</td>
       <td>₹${o.delivery}</td>
       <td><b>₹${o.total}</b></td>
+      <td>UPI / QR Code</td>
       <td>
         <select class="status-select" onchange="updateStatus('${o.orderId}', this.value)">
           ${['Pending','Processing','Shipped','Delivered','Cancelled'].map(s =>
@@ -236,47 +252,36 @@ function exportExcel() {
   if (!orders.length) { alert('No orders to export.'); return; }
 
   const rows = orders.map((o, i) => ({
-    'Sr No':         i + 1,
-    'Order ID':      o.orderId,
-    'Date & Time':   o.datetime,
-    'Customer Name': o.name,
-    'Mobile':        o.mobile,
-    'Email':         o.email || '',
-    'Address':       o.address,
-    'City':          o.city,
-    'State':         o.state,
-    'PIN Code':      o.pin,
-    'Landmark':      o.landmark || '',
-    'Delivery Type': o.deliveryType || 'Standard',
-    'Instructions':  o.instructions || '',
-    'Books Ordered': (o.items||[]).map(b => `${b.title} ×${b.qty}`).join(' | '),
-    'Total Items':   o.itemCount,
-    'Subtotal (₹)':  o.subtotal,
-    'Delivery (₹)':  o.delivery,
-    'Total (₹)':     o.total,
-    'Payment':       'UPI / QR Code',
-    'Status':        o.status || 'Pending'
+    'Sr No':          i + 1,
+    'Order ID':       o.orderId,
+    'Date & Time':    o.datetime,
+    'Customer Name':  o.name,
+    'Mobile':         o.mobile,
+    'Email':          o.email || '',
+    'Address':        o.address,
+    'City':           o.city,
+    'State':          o.state,
+    'PIN Code':       o.pin,
+    'Landmark':       o.landmark || '',
+    'Delivery Type':  o.deliveryType || 'Standard',
+    'Instructions':   o.instructions || '',
+    'Books Ordered':  (o.items||[]).map(b => `${b.title} ×${b.qty}`).join(' | '),
+    'Total Items':    o.itemCount,
+    'Subtotal (₹)':   o.subtotal,
+    'Delivery (₹)':   o.delivery,
+    'Total (₹)':      o.total,
+    'Payment':        'UPI / QR Code',
+    'Status':         o.status || 'Pending'
   }));
 
   const ws = XLSX.utils.json_to_sheet(rows);
   ws['!cols'] = [
     {wch:6},{wch:14},{wch:20},{wch:22},{wch:14},{wch:26},
-    {wch:30},{wch:14},{wch:18},{wch:10},{wch:18},{wch:16},
+    {wch:30},{wch:14},{wch:18},{wch:10},{wch:18},{wch:22},
     {wch:26},{wch:52},{wch:10},{wch:12},{wch:12},{wch:12},
     {wch:16},{wch:14}
   ];
-
-  // Style header row
-  const range = XLSX.utils.decode_range(ws['!ref']);
-  for (let C = range.s.c; C <= range.e.c; C++) {
-    const cell = ws[XLSX.utils.encode_cell({ r: 0, c: C })];
-    if (cell) {
-      cell.s = {
-        fill: { fgColor: { rgb: '6C3483' } },
-        font: { bold: true, color: { rgb: 'FFFFFF' } }
-      };
-    }
-  }
+  ws['!freeze'] = { xSplit: 0, ySplit: 1 };
 
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Orders');

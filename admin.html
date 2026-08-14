@@ -27,10 +27,6 @@
         <input type="password" id="adminPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
       </div>
       <div class="login-error" id="loginError"></div>
-      <div class="login-hint">
-        <i class="fas fa-info-circle"></i>
-        Username: <b>admin</b> &nbsp;|&nbsp; Password: <b>yash2025</b>
-      </div>
       <button class="login-btn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
     </div>
   </div>
@@ -65,6 +61,12 @@
 
   <!-- Main -->
   <main class="admin-main">
+
+    <!-- Apps Script URL warning -->
+    <div id="urlWarning" style="display:none;align-items:center;gap:.75rem;background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:.75rem 1.2rem;border-radius:8px;margin:1rem 1rem 0;font-size:.88rem">
+      <i class="fas fa-exclamation-triangle" style="font-size:1.1rem"></i>
+      <span><b>Apps Script URL not configured.</b> Orders placed on other devices won't appear here. Set <code>window.APPS_SCRIPT_URL</code> at the bottom of admin.html to your deployed Google Apps Script URL.</span>
+    </div>
 
     <!-- Topbar -->
     <div class="topbar">
@@ -110,17 +112,25 @@
         <table class="orders-table">
           <thead>
             <tr>
-              <th>#</th>
+              <th>Sr No</th>
               <th>Order ID</th>
-              <th>Date & Time</th>
-              <th>Customer</th>
+              <th>Date &amp; Time</th>
+              <th>Customer Name</th>
               <th>Mobile</th>
-              <th>City / State</th>
-              <th>PIN</th>
+              <th>Email</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>State</th>
+              <th>PIN Code</th>
+              <th>Landmark</th>
+              <th>Delivery Type</th>
+              <th>Instructions</th>
               <th>Books Ordered</th>
-              <th>Items</th>
-              <th>Delivery</th>
-              <th>Total</th>
+              <th>Total Items</th>
+              <th>Subtotal (₹)</th>
+              <th>Delivery (₹)</th>
+              <th>Total (₹)</th>
+              <th>Payment</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -203,7 +213,7 @@
 </div>
 
 <!-- Replace YOUR_APPS_SCRIPT_WEB_APP_URL with your deployed Apps Script URL -->
-<script>window.APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';</script>
+<script>window.APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5bcXsDPPUx0suImQjG4wokk6iPp-XgOAUo0BDc3Axhb46KUCRT8bLwzix9FzmmWlPsw/exec';</script>
 <script src="admin.js"></script>
 </body>
 </html>
