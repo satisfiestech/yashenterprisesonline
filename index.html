@@ -3,101 +3,161 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yash Enterprises Online – Bookstore</title>
+  <meta name="description" content="Premium bookstore for competitive exams, UPSC, MPSC, SSC, Banking books and study materials."/>
+  <meta name="theme-color" content="#1e3a8a"/>
+  <title>Yash Enterprises Online – Premium Bookstore</title>
   <link rel="stylesheet" href="style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <a href="#home" class="logo">
-    <img src="logo.svg" alt="Yash Enterprises Online" class="logo-img"/>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#featured">Books</a></li>
-    <li><a href="#categories">Categories</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search books, authors..." oninput="searchBooks(this.value)" onkeydown="if(event.key==='Escape')clearSearch()"/>
-    <i class="fas fa-search search-icon"></i>
-    <button class="clear-btn" id="clearBtn" onclick="clearSearch()" style="display:none"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="cart-icon" onclick="toggleCart()">
-    <i class="fas fa-shopping-cart"></i>
-    <span class="cart-count" id="cartCount">0</span>
-  </div>
-</nav>
+<!-- ORIGINAL BOOKS TRUST BAR -->
+<div class="original-books-bar" role="note">
+  <span>100% Original Books! Direct From Publishers.</span>
+</div>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-content">
-    <h1>Discover Your Next<br/><span>Favourite Book</span></h1>
-    <p>Thousands of titles across every genre — delivered to your door.</p>
-    <a href="#featured" class="btn-primary">Shop Now</a>
+<!-- HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <a href="#" class="logo-section">
+        <img src="logo.png" alt="Yash Enterprises" class="logo"/>
+        <!--<div class="logo-text">
+          <h1 class="brand-name">Yash Enterprises</h1>
+          <p class="brand-tagline">Premium Book Hub</p>
+        </div>-->
+      </a>
+
+      <div class="search-wrapper">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search books, authors..." oninput="searchBooks(this.value)"/>
+      </div>
+
+      <div class="header-actions">
+        <button class="cart-btn" onclick="toggleCart()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
   </div>
-  <div class="hero-img">
-    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80" alt="Books"/>
+</header>
+
+<!-- HERO BANNER -->
+<!--<section class="hero-banner">
+  <div class="banner-content">
+    <div class="banner-text">
+      <span class="banner-badge">Yash Exclusive Collection</span>
+      <h2 class="banner-title">UPSC & MPSC 2026 Study Materials</h2>
+      <p class="banner-desc">Comprehensive books, guides, and preparation strategies for competitive exams</p>
+      <button class="btn-browse">Browse Collection</button>
+    </div>
+  </div>
+</section>-->
+
+<!-- ROTATING FEATURED BOOK BANNER -->
+<section class="rotating-book-banner">
+  <div class="banner-container">
+    <div class="banner-text-side">
+      <span class="banner-badge">Yash Exclusive Collection</span></br>
+      <span class="banner-label" id="bannerLabel">YASH EXCLUSIVE MATERIALS</span>
+      <h3 class="banner-book-title" id="bannerTitle">Book Title</h3>
+      <p class="banner-book-desc" id="bannerDesc">Book description here</p>
+      <button class="btn-banner" onclick="viewCurrentBannerBook()">View Details</button>
+    </div>
+    <div class="banner-image-side">
+      <img src="" alt="Featured Book" class="banner-book-img" id="bannerImg"/>
+    </div>
+  </div>
+  <div class="banner-indicators" id="bannerIndicators"></div>
+</section>
+
+<!-- FEATURED BOOKS SECTION -->
+<section class="featured-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+        Trending Books
+      </h2>
+      <p class="section-desc">Best sellers and most-read preparation materials</p>
+    </div>
+
+    <div class="books-grid" id="booksGrid"></div>
+    <div class="no-result" id="noResult" style="display: none;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <p>No books found for your search.</p>
+      <button class="btn-secondary" onclick="clearSearch()">Clear Search</button>
+    </div>
   </div>
 </section>
 
-<!-- CATEGORIES -->
-<section class="categories" id="categories">
-  <h2 class="section-title">Browse Categories</h2>
-  <div class="cat-grid">
-    <div class="cat-card" style="--c:#ff6b6b" onclick="filterBooks('Fiction')">
-      <i class="fas fa-dragon"></i><span>Fiction</span>
-    </div>
-    <div class="cat-card" style="--c:#feca57" onclick="filterBooks('Science')">
-      <i class="fas fa-flask"></i><span>Science</span>
-    </div>
-    <div class="cat-card" style="--c:#48dbfb" onclick="filterBooks('Children')">
-      <i class="fas fa-child"></i><span>Children</span>
-    </div>
-    <div class="cat-card" style="--c:#ff9ff3" onclick="filterBooks('Romance')">
-      <i class="fas fa-heart"></i><span>Romance</span>
-    </div>
-    <div class="cat-card" style="--c:#54a0ff" onclick="filterBooks('History')">
-      <i class="fas fa-history"></i><span>History</span>
-    </div>
-    <div class="cat-card" style="--c:#5f27cd" onclick="filterBooks('Self-Help')">
-      <i class="fas fa-brain"></i><span>Self-Help</span>
-    </div>
-    <div class="cat-card" style="--c:#e67e22" onclick="filterBooks('Competitive')">
-      <i class="fas fa-graduation-cap"></i><span>Competitive</span>
-    </div>
-    <div class="cat-card" style="--c:#00b894" onclick="filterBooks('Biography')">
-      <i class="fas fa-user-tie"></i><span>Biography</span>
-    </div>
-    <div class="cat-card" style="--c:#d63031" onclick="filterBooks('Religion')">
-      <i class="fas fa-om"></i><span>Religion</span>
-    </div>
-  </div>
-</section>
+<!-- MAIN CONTENT GRID -->
+<section class="content-grid">
+  <div class="container">
+    <div class="grid-2col">
+      <!-- LEFT: GUIDANCE HUB -->
+      <div class="guidance-card">
+        <div class="card-header">
+          <h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+            Exam Preparation Guide
+          </h3>
+          <span class="badge">Strategies Active</span>
+        </div>
+        <div class="articles-list">
+          <div class="article-item">
+            <span class="article-tag">Strategy</span>
+            <span class="read-time">8 min</span>
+            <h4>MPSC 2026 Descriptive Writing Techniques</h4>
+            <p>Master structured answers, introduction frameworks, and conclusion strategies for MPSC descriptive papers.</p>
+            <a href="#" class="read-more">Read Article →</a>
+          </div>
+          <div class="article-item">
+            <span class="article-tag">Study Tips</span>
+            <span class="read-time">5 min</span>
+            <h4>UPSC General Studies Revision Plan</h4>
+            <p>Comprehensive revision checklist covering GS Papers I-IV with core themes and important topics.</p>
+            <a href="#" class="read-more">Read Article →</a>
+          </div>
+          <div class="article-item">
+            <span class="article-tag">Time Management</span>
+            <span class="read-time">6 min</span>
+            <h4>Speed Maths & Reasoning Tips</h4>
+            <p>Calculate percentages, interests, and solve logical reasoning puzzles in under 30 seconds.</p>
+            <a href="#" class="read-more">Read Article →</a>
+          </div>
+        </div>
+      </div>
 
-<!-- FEATURED BOOKS -->
-<section class="featured" id="featured">
-  <h2 class="section-title">Featured Books</h2>
-  <div class="filter-bar">
-    <button class="filter-btn active" onclick="filterBooks('All')">All</button>
-    <button class="filter-btn" onclick="filterBooks('Fiction')">Fiction</button>
-    <button class="filter-btn" onclick="filterBooks('Science')">Science</button>
-    <button class="filter-btn" onclick="filterBooks('Children')">Children</button>
-    <button class="filter-btn" onclick="filterBooks('Romance')">Romance</button>
-    <button class="filter-btn" onclick="filterBooks('History')">History</button>
-    <button class="filter-btn" onclick="filterBooks('Self-Help')">Self-Help</button>
-    <button class="filter-btn" onclick="filterBooks('Competitive')">Competitive</button>
-    <button class="filter-btn" onclick="filterBooks('Biography')">Biography</button>
-    <button class="filter-btn" onclick="filterBooks('Religion')">Religion</button>
-  </div>
-  <div class="books-grid" id="booksGrid"></div>
-  <div class="no-result" id="noResult">
-    <i class="fas fa-search"></i>
-    <p>No books found for your search.</p>
-    <button class="btn-primary" onclick="clearSearch()">Clear Search</button>
+      <!-- RIGHT: RESOURCES BOX -->
+      <div class="resources-card">
+        <h3>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+          Study Resources
+        </h3>
+        <p>Access verified preparation materials and expert recommendations.</p>
+        <div class="resources-list">
+          <div class="resource-row">
+            <span>MPSC Updates</span>
+            <strong>Weekly Mapped</strong>
+          </div>
+          <div class="resource-row">
+            <span>UPSC Syllabuses</span>
+            <strong>Verified Solutions</strong>
+          </div>
+          <div class="resource-row">
+            <span>Banking Mocks</span>
+            <strong>Complete Practice</strong>
+          </div>
+          <div class="resource-row">
+            <span>SSC Prep Guides</span>
+            <strong>Quick Reference</strong>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -110,9 +170,7 @@
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-footer">
     <div class="cart-totals">
-      <div class="cart-total-row"><span>Subtotal</span><strong id="cartTotal">₹0</strong></div>
-      <div class="cart-total-row delivery-row"><span>Delivery</span><strong id="cartDelivery">₹0</strong></div>
-      <div class="cart-total-row grand-row"><span>Grand Total</span><strong id="cartGrand">₹0</strong></div>
+      <div class="cart-total-row grand-row"><span>Books Total</span><strong id="cartTotal">₹0</strong></div>
     </div>
     <button class="btn-checkout" onclick="openCheckout()"><i class="fas fa-lock"></i> Proceed to Checkout</button>
   </div>
@@ -142,9 +200,7 @@
       </div>
       <div class="order-review-list" id="orderReviewList"></div>
       <div class="order-summary-box">
-        <div class="sum-row"><span>Subtotal</span><b id="rev-sub">₹0</b></div>
-        <div class="sum-row"><span>Delivery Charges</span><b id="rev-del">₹0</b></div>
-        <div class="sum-row total-sum"><span>Total Payable</span><b id="rev-total">₹0</b></div>
+        <div class="sum-row total-sum"><span>Books Total</span><b id="rev-sub">₹0</b></div>
       </div>
       <button class="btn-next" onclick="goStep(2)">Continue to Delivery <i class="fas fa-arrow-right"></i></button>
     </div>
@@ -219,34 +275,14 @@
           <label>Delivery Instructions</label>
           <textarea id="instructions" rows="2" placeholder="Any special delivery instructions..."></textarea>
         </div>
-        <div class="delivery-options">
-          <p class="delivery-label">Delivery Type</p>
-          <label class="delivery-opt">
-            <input type="radio" name="delivery" value="standard" checked onchange="updateDelivery(this.value)"/>
-            <div class="opt-box">
-              <i class="fas fa-truck"></i>
-              <div><b>Standard Delivery</b><small>5–7 business days</small></div>
-              <span class="opt-price">₹49</span>
-            </div>
-          </label>
-          <label class="delivery-opt">
-            <input type="radio" name="delivery" value="express" onchange="updateDelivery(this.value)"/>
-            <div class="opt-box">
-              <i class="fas fa-bolt"></i>
-              <div><b>Express Delivery</b><small>2–3 business days</small></div>
-              <span class="opt-price">₹99</span>
-            </div>
-          </label>
-          <label class="delivery-opt">
-            <input type="radio" name="delivery" value="free" onchange="updateDelivery(this.value)"/>
-            <div class="opt-box">
-              <i class="fas fa-gift"></i>
-              <div><b>Free Delivery</b><small>Orders above ₹999 · 7–10 days</small></div>
-              <span class="opt-price free">FREE</span>
-            </div>
-          </label>
-        </div>
       </form>
+      <div class="order-summary-box delivery-charge-summary">
+        <p class="charge-summary-title">Order Charges Breakdown</p>
+        <div class="sum-row"><span>Books Subtotal</span><b id="delivery-sub">₹0</b></div>
+        <div class="sum-row"><span>Handling Charges</span><b id="delivery-handling">₹0</b></div>
+        <div class="sum-row"><span>Courier Charges</span><b id="delivery-courier">₹0</b></div>
+        <div class="sum-row total-sum"><span>Grand Total</span><b id="delivery-total">₹0</b></div>
+      </div>
       <button class="btn-next" onclick="validateDelivery()">Continue to Payment <i class="fas fa-arrow-right"></i></button>
     </div>
 
@@ -298,8 +334,9 @@
 
         <!-- Pay summary -->
         <div class="pay-summary">
-          <div class="sum-row"><span>Subtotal</span><b id="pay-sub">₹0</b></div>
-          <div class="sum-row"><span>Delivery</span><b id="pay-del">₹0</b></div>
+          <div class="sum-row"><span>Books Subtotal</span><b id="pay-sub">₹0</b></div>
+          <div class="sum-row"><span>Handling Charges</span><b id="pay-handling">₹0</b></div>
+          <div class="sum-row"><span>Courier Charges</span><b id="pay-courier">₹0</b></div>
           <div class="sum-row total-sum"><span>Total Payable</span><b id="pay-total">₹0</b></div>
         </div>
 
@@ -323,28 +360,148 @@
   </div>
 </div>
 
-<!-- CONTACT -->
-<section class="contact" id="contact">
-  <h2 class="section-title">Get In Touch</h2>
-  <div class="contact-grid">
-    <div class="contact-info">
-      <div class="info-item"><i class="fas fa-envelope"></i><a href="mailto:info@yashenterprisesonline.in">info@yashenterprisesonline.in</a></div>
-      <div class="info-item"><i class="fas fa-phone"></i><a href="tel:7020121893">+91 7020121893</a></div>
-      <div class="info-item"><i class="fas fa-map-marker-alt"></i><span>India</span></div>
+<!-- ABOUT SECTION -->
+<section class="about-section">
+  <div class="container">
+    <div class="about-box">
+      <h2>About Yash Enterprises Online</h2>
+      <p>We are a premium online bookstore specializing in competitive exam preparation materials for UPSC, MPSC, SSC, Banking, and other entrance examinations. With a curated collection of study guides, practice papers, and revision materials, we help thousands of aspirants achieve their goals.</p>
+      <div class="about-actions">
+        <button class="btn-secondary">Read More →</button>
+        <a href="/about" class="about-link">Go to About Page →</a>
+      </div>
     </div>
-    <form class="contact-form" onsubmit="submitForm(event)">
-      <input type="text" placeholder="Your Name" required/>
-      <input type="email" placeholder="Your Email" required/>
-      <textarea placeholder="Your Message" rows="4" required></textarea>
-      <button type="submit" class="btn-primary">Send Message</button>
-    </form>
   </div>
 </section>
 
+<!-- CONTACT SECTION -->
+<section class="contact-section">
+  <div class="container">
+    <h2 class="section-title">Get Expert Assistance</h2>
+    <div class="contact-wrapper">
+      <form class="contact-form" onsubmit="submitForm(event)">
+        <input type="text" placeholder="Your Name" required/>
+        <input type="tel" placeholder="Contact Number" required/>
+        <textarea placeholder="Your Query or Order" rows="3" required></textarea>
+        <button type="submit" class="btn-primary">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ SECTION -->
+<section class="faq-section">
+  <div class="container">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <div class="faq-question">
+          <h4>How do I place an order?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>Browse our collection, add books to cart, proceed to checkout, enter delivery details, and complete payment via UPI. Your order will be delivered within 5-7 business days.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <h4>What are the delivery charges?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>Standard delivery is ₹49 (5-7 days), Express delivery is ₹99 (2-3 days), and Free delivery is available on orders above ₹999 (7-10 days).</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <h4>Do you offer refunds or exchanges?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>Yes, we offer 30-day money-back guarantee and free exchanges for damaged books. Contact us with your order details and photos.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <h4>Are the books latest editions?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>All books in our collection are from the latest editions. We regularly update our inventory to match the latest exam syllabuses.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK DETAILS MODAL -->
+<div class="book-modal" id="bookModal" style="display:none;">
+  <div class="modal-overlay" onclick="closeBook()"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Quick View</h3>
+      <button class="modal-close" onclick="closeBook()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-left">
+        <img id="modalImg" src="" alt="Book cover"/>
+      </div>
+      <div class="modal-right">
+        <div class="modal-meta"><span class="badge" id="modalBadge">Category</span></div>
+        <h2 id="modalTitle">Book Title</h2>
+
+        <div class="modal-submeta">
+          <span class="modal-author" id="modalAuthor">by Someone</span>
+          <span class="modal-rating" id="modalRating">★ 4.9</span>
+          <span class="modal-reviews" id="modalReviews">(120 reviews)</span>
+        </div>
+
+        <div class="modal-price-row">
+          <div class="modal-price">₹<span id="modalPrice">0</span></div>
+          <div class="modal-oldprice" id="modalOldPrice">₹0</div>
+          <div class="modal-stock" id="modalStock">IN STOCK & READY TO SHIP</div>
+        </div>
+
+        <div class="modal-specs">
+          <div><strong>Publisher:</strong> <span id="modalPublisher"></span></div>
+          <div><strong>Pages:</strong> <span id="modalPages"></span></div>
+          <div><strong>ISBN:</strong> <span id="modalISBN"></span></div>
+        </div>
+
+        <h4>Book Description</h4>
+        <p id="modalDesc">Short description goes here.</p>
+
+        <h4>Key Highlights</h4>
+        <ul id="modalHighlights">
+          <li>Updated for 2026</li>
+          <li>Practice sets included</li>
+        </ul>
+
+        <div class="modal-footer-note">100% Genuine Exam Books • Direct Dispatch from Anand Publications</div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="quantity-row">
+        <label>Quantity:</label>
+        <button onclick="adjustQty(-1)">-</button>
+        <span id="modalQty">1</span>
+        <button onclick="adjustQty(1)">+</button>
+      </div>
+      <div class="modal-actions-fixed">
+        <button class="btn-add" id="modalAddBtn" onclick="addToCartFromModal()"><i class="fas fa-shopping-cart"></i> ADD TO CART</button>
+        <button class="btn-viewmore" id="modalViewMore">VIEW MORE</button>
+        <button class="btn-go-cart" onclick="goToCart()">GO TO CART</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer>
-  <img src="logo.svg" alt="Yash Enterprises Online" class="footer-logo"/>
-  <p>© 2025 Yash Enterprises Online. All rights reserved.</p>
+  <img src="logo.png" alt="Yash Enterprises Online" class="footer-logo"/>
+  <p>© 2026 Yash Enterprises Online. All rights reserved.</p>
   <p><a href="mailto:info@yashenterprisesonline.in">info@yashenterprisesonline.in</a> | <a href="tel:7020121893">+91 7020121893</a></p>
 </footer>
 
