@@ -178,7 +178,18 @@ function renderTable() {
 function updateStatus(orderId, newStatus) {
   const orders = getOrders();
   const o = orders.find(x => x.orderId === orderId);
-  if (o) { o.status = newStatus; saveOrders(orders); renderMiniStats(); }
+  if (!o) return;
+  o.status = newStatus;
+  saveOrders(orders);
+  renderMiniStats();
+  // Sync status change to Google Sheet
+  if (window.APPS_SCRIPT_URL && window.APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL') {
+    fetch(window.APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ action: 'updateStatus', orderId: orderId, status: newStatus })
+    }).catch(() => {});
+  }
 }
 
 // ── DELETE ──

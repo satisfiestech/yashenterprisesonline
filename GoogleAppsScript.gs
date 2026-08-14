@@ -24,12 +24,32 @@ function getSheet() {
   return sheet;
 }
 
-// POST - save a new order
+// POST - save a new order OR update status
 function doPost(e) {
   try {
-    var order = JSON.parse(e.postData.contents);
+    var data = JSON.parse(e.postData.contents);
+
+    // Handle status update
+    if (data.action === 'updateStatus') {
+      var sheet = getSheet();
+      var rows = sheet.getDataRange().getValues();
+      for (var i = 1; i < rows.length; i++) {
+        if (rows[i][1] == data.orderId) {
+          sheet.getRange(i + 1, 20).setValue(data.status); // column 20 = Status
+          return ContentService
+            .createTextOutput(JSON.stringify({ success: true }))
+            .setMimeType(ContentService.MimeType.JSON);
+        }
+      }
+      return ContentService
+        .createTextOutput(JSON.stringify({ success: false, error: 'Order not found' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Handle new order
+    var order = data;
     var sheet = getSheet();
-    var srNo = sheet.getLastRow(); // row 1 = header
+    var srNo = sheet.getLastRow();
 
     var booksOrdered = (order.items || []).map(function(b) {
       return b.title + ' x' + b.qty;
