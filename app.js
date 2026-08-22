@@ -1,7 +1,11 @@
 // Books database - Add your catalog later
 const books = [
   { id: 1, title: "बुद्धिमत्ता - Basic to Advanced", author: "प्रा. सतीश वसे", category: "MPSC EXAM", price: 560, oldPrice: 599, stars: 4.9, reviews: 120, img: "images/buddhimatta-basic-to-advanced.png" },
-  { id: 2, title: "FASTRACK MATHS - Basic to Advance (APTI)", author: "प्रा. सतीश वसे", category: "MPSC EXAM", price: 560, oldPrice: 599, stars: 4.9, reviews: 120, img: "images/fastrack-maths.png" }
+  { id: 2, title: "FASTRACK MATHS - Basic to Advance (APTI)", author: "प्रा. सतीश वसे", category: "MPSC EXAM", price: 560, oldPrice: 599, stars: 4.9, reviews: 120, img: "images/fastrack-maths.png" },
+  { id: 3, title: "भारतीय अर्थव्यवस्था", author: "विठ्ठल पुंगळे", category: "MPSC EXAM", price: 400, stars: 4.8, reviews: 0, img: "images/book-cover-3.png", publisher: "वैदिका पब्लिकेशन", description: "UPSC–MPSC, PSI, STI आणि ASO परीक्षांसाठी भारतीय अर्थव्यवस्थेचे मार्गदर्शक पुस्तक." },
+  { id: 4, title: "भूगोल व पर्यावरण (भारत व जग)", author: "विठ्ठल पुंगळे", category: "MPSC EXAM", price: 400, stars: 4.8, reviews: 0, img: "images/book-cover-4.png", publisher: "वैदिका पब्लिकेशन", description: "UPSC–MPSC, PSI, STI आणि ASO परीक्षांसाठी भूगोल व पर्यावरणाचे मार्गदर्शक पुस्तक." },
+  { id: 5, title: "आधुनिक भारताचा इतिहास", author: "विठ्ठल पुंगळे", category: "MPSC EXAM", price: 400, stars: 4.8, reviews: 0, img: "images/book-cover-5.png", publisher: "वैदिका पब्लिकेशन", description: "UPSC–MPSC, PSI, STI आणि ASO परीक्षांसाठी आधुनिक भारताच्या इतिहासाचे मार्गदर्शक पुस्तक." },
+  { id: 6, title: "महाराष्ट्राचा भूगोल", author: "विठ्ठल पुंगळे", category: "MPSC EXAM", price: 400, stars: 4.8, reviews: 0, img: "images/book-cover-6.png", publisher: "वैदिका पब्लिकेशन", description: "MPSC, PSI, STI आणि ASO परीक्षांसाठी महाराष्ट्राच्या भूगोलाचे मार्गदर्शक पुस्तक." }
 ];
 
 // Cart state
